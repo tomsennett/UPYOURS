@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPME Example</title>
+    <script src="upme.js" defer></script>
+    <script>
+        // Define the UPME function for the 'clickAlert' class
+        function UPME_clickAlert() {
+            if (this_event('click')) {
+                alert('Button clicked!');
+            }
+        }
+
+        // Define the UPME function for the 'hoverAlert' class
+        function UPME_hoverAlert() {
+            if (this_event('mouseover')) 
+            {
+                this.style.backgroundColor = 'lightblue';
+            }
+            else  if (this_event('mouseout'))
+            {
+                this.style.backgroundColor = 'white';
+            }
+        }
+    </script>
+</head>
+<body>
+    <button class="UPME clickAlert hoverAlert">Click or Hover Me!</button>
+</body>
+</html>
