@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <style>
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .display {
+            grid-column: 1 / span 4;
+            height: 50px;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: right;
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        .button {
+            height: 50px;
+            background-color: #e0e0e0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
+
+    
+
+<script>
+
+function UPDATE_numButton()
+    {
+        this.innerHTML = this.dataset.val;
+        if (this.classList.contains('event-click'))
+        {
+            let display = document.querySelector('.display');
+            display.innerHTML += this.dataset.val;
+        }
+    }
+
+
+</script>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display"></div>
+        <div class="numButton UPME" data-val="0"></div>
+        <div class="numButton UPME" data-val="1"></div>
+        <div class="numButton UPME" data-val="2"></div>
+        <div class="numButton UPME" data-val="3"></div>
+        <div class="numButton UPME" data-val="4"></div>
+        <div class="numButton UPME" data-val="5"></div>
+        <div class="numButton UPME" data-val="6"></div>
+        <div class="numButton UPME" data-val="7"></div>
+        <div class="numButton UPME" data-val="8"></div>
+        <div class="numButton UPME" data-val="9"></div>
+    </div>
+
+    
+<script src="upme.js" defer></script>
+</body>
+</html>

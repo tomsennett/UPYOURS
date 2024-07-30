@@ -1,140 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Handling Demo</title>
+    <title>UPME.js with Bulma - Corrected Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            padding: 20px;
-            color: #333;
+        .tooltip {
+            position: relative;
+            display: inline-block;
         }
-
-        h1 {
+        .tooltipText {
+            visibility: hidden;
+            width: 120px;
+            background-color: #4a4a4a;
+            color: #fff;
             text-align: center;
-            color: #4CAF50;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
+        .tooltip:hover .tooltipText {
+            visibility: visible;
+            opacity: 1;
         }
-
-        .box,
-        .input-box {
-            padding: 20px;
-            border: 1px solid #ddd;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .box:hover,
-        .input-box:focus-within {
-            transform: scale(1.05);
-        }
-
-        .clickable {
-            cursor: pointer;
-            font-size: 1.2em;
-        }
-
-        .colorBox {
-            width: 100px;
-            height: 100px;
-            background-color: #ccc;
-        }
-
-        .keyInput,
-        .focusBlur {
-            width: 100%;
+        .mirrorDisplay {
+            border: 1px solid #dbdbdb;
             padding: 10px;
-            font-size: 1em;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            min-height: 40px;
         }
-
-        .keyInput:focus,
-        .focusBlur:focus {
-            outline: none;
-            border-color: #4CAF50;
+        .dynamicBg {
+            height: 40px;
+            transition: background-color 0.3s;
         }
     </style>
     <script>
-        // Global variables
-        let totalMouseClicks = 0;
-        let totalMouseMovements = 0;
-        let lastKeyPressed = '';
-
-        // Define update functions for the elements
-        function UPDATE_clickable() {
+        // Button Click Counter
+        function UPME_buttonClickCounter() {
             if (this.classList.contains("event-click")) {
-                totalMouseClicks++;
-                this.innerHTML = `Clicks: ${totalMouseClicks}`;
+                let count = parseInt(this.getAttribute('data-click-count')) || 0;
+                count++;
+                this.setAttribute('data-click-count', count);
+                this.textContent = `Button clicked ${count} times`;
             }
         }
 
-        function UPDATE_colorBox() {
-            if (this.classList.contains("event-mouseover")) {
-                this.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        // Hover Tooltip
+        function UPME_tooltip() {
+            const tooltipText = this.querySelector('.tooltipText');
+            if (this.classList.contains("event-mouseover") && tooltipText) {
+                tooltipText.style.visibility = 'visible';
+                tooltipText.style.opacity = '1';
+            }
+            if (this.classList.contains("event-mouseout") && tooltipText) {
+                tooltipText.style.visibility = 'hidden';
+                tooltipText.style.opacity = '0';
             }
         }
 
-        function UPDATE_mouseTracker() {
-            if (this.classList.contains("event-mousemove")) {
-                totalMouseMovements++;
-                this.innerHTML = `Mouse Movements: ${totalMouseMovements}`;
+        // Text Input Mirror
+        function UPME_textInputMirror() {
+            if (this.classList.contains("event-input")) {
+                const value = this.value;
+                document.querySelector('.mirrorDisplay').textContent = value;
             }
         }
 
-        function UPDATE_keyInput() {
-            if (this.classList.contains("event-keyup")) {
-                const lastKey = this.getAttribute('data-keyup-key');
-                if (lastKey) {
-                    document.querySelector(".lastKeyBox").value = `Last Key: ${lastKey}`;
-                    console.log(`Last key: ${lastKey}`);
-                } else {
-                    console.log("No key found in data-keyup-key attribute");
-                }
+        // Number Increment/Decrement
+        function UPME_numberAdjuster() {
+            if (this.classList.contains("event-click")) {
+                let currentValue = parseInt(this.getAttribute('data-value')) || 0;
+                const action = this.getAttribute('data-action');
+                if (action === 'increment') currentValue++;
+                if (action === 'decrement') currentValue--;
+                this.setAttribute('data-value', currentValue);
+                document.querySelector('.numberDisplay').textContent = `Value: ${currentValue}`;
             }
         }
 
-
-
-
-        function UPDATE_focusBlur() {
-            if (this.classList.contains("event-focus")) {
-                this.style.borderColor = 'blue';
+        // Toggle Switch
+        function UPME_toggleSwitch() {
+            if (this.classList.contains("event-click")) {
+                const toggleState = this.getAttribute('data-toggle-state') === 'on';
+                this.setAttribute('data-toggle-state', toggleState ? 'off' : 'on');
+                this.textContent = `Toggle is ${toggleState ? 'Off' : 'On'}`;
             }
-            if (this.classList.contains("event-blur")) {
-                this.style.borderColor = 'red';
+        }
+
+        // Text Area Character Counter
+        function UPME_charCounter() {
+            if (this.classList.contains("event-input")) {
+                const value = this.value;
+                document.querySelector('.charCountDisplay').textContent = `Characters: ${value.length}`;
+            }
+        }
+
+        // Range Slider with Dynamic Background
+        function UPME_rangeSlider() {
+            if (this.classList.contains("event-input")) {
+                const value = this.value;
+                const bgElement = document.querySelector('.dynamicBg');
+                bgElement.style.backgroundColor = `rgb(${value}, ${255 - value}, ${value / 2})`;
+                document.querySelector('.sliderValueDisplay').textContent = `Slider Value: ${value}`;
             }
         }
     </script>
 </head>
+<body>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">UPME.js with Bulma - Corrected Demo</h1>
+            <p class="subtitle">Explore corrected interactive elements using UPME.js and Bulma.</p>
 
-<body class="UPME keyInput">
-    <h1>Interactive Event Demo</h1>
-    <div class="container">
-        <div class="UPME box clickable">Clicks: 0</div>
-        <div class="UPME box colorBox"></div>
-        <div class="UPME box mouseTracker">Mouse Movements: 0</div>
-        <div class="UPME input-box">
-            <input type="text" class="lastKeyBox" placeholder="Press any key" />
-        </div>
-        <div class="UPME input-box">
-            <input type="text" class="UPME focusBlur" placeholder="Focus and Blur" />
-        </div>
-    </div>
+            <!-- Button Click Counter -->
+            <div class="box">
+                <button class="button is-primary UPME buttonClickCounter" data-click-count="0">Button clicked 0 times</button>
+            </div>
 
-    <!-- Include the library script -->
+            <!-- Hover Tooltip -->
+            <div class="box">
+                <div class="tooltip UPME tooltip">
+                    Hover over me
+                    <div class="tooltipText">Tooltip text</div>
+                </div>
+            </div>
+
+            <!-- Text Input Mirror -->
+            <div class="box">
+                <input type="text" class="input UPME textInputMirror" placeholder="Type to mirror...">
+                <div class="mirrorDisplay">Type to mirror...</div>
+            </div>
+
+            <!-- Number Increment/Decrement -->
+            <div class="box">
+                <button class="button UPME numberAdjuster" data-action="decrement" data-value="0">-</button>
+                <button class="button UPME numberAdjuster" data-action="increment" data-value="0">+</button>
+                <div class="numberDisplay">Value: 0</div>
+            </div>
+
+            <!-- Toggle Switch -->
+            <div class="box">
+                <button class="button UPME toggleSwitch" data-toggle-state="off">Toggle is Off</button>
+            </div>
+
+            <!-- Text Area Character Counter -->
+            <div class="box">
+                <textarea class="textarea UPME charCounter" placeholder="Start typing..."></textarea>
+                <div class="charCountDisplay">Characters: 0</div>
+            </div>
+
+            <!-- Range Slider with Dynamic Background -->
+            <div class="box">
+                <input type="range" class="UPME rangeSlider" min="0" max="255" value="128">
+                <div class="dynamicBg"></div>
+                <div class="sliderValueDisplay">Slider Value: 128</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Include the UPME.js library -->
     <script src="upme.js"></script>
 </body>
-
 </html>

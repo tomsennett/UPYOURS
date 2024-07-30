@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  // Helper function to safely execute update functions with context set to the element
+  // Helper function to safely execute UPME functions with context set to the element
   function safeExecute(func, element) {
     try {
       if (typeof func === 'function') {
@@ -20,21 +20,22 @@
       // Iterate through all classes of the element
       element.classList.forEach(cls => {
         if (cls !== 'UPME') {
-          const updateFunction = window[`UPDATE_${cls}`];
+          const updateFunction = window[`UPME_${cls}`];
           safeExecute(updateFunction, element);
         }
       });
     });
 
-    // Remove event classes after update
+    // Remove event classes and data attributes after update
     elements.forEach(element => {
-      removeEventClasses(element);
+      removeEventClassesAndDataAttributes(element);
     });
 
     requestAnimationFrame(update);
   }
 
-  function removeEventClasses(element) {
+  function removeEventClassesAndDataAttributes(element) {
+    // Remove event- classes
     const eventClasses = [];
     element.classList.forEach(cls => {
       if (cls.startsWith('event-')) {
@@ -42,6 +43,13 @@
       }
     });
     eventClasses.forEach(cls => element.classList.remove(cls));
+
+    // Remove only data- attributes related to events
+    Array.from(element.attributes).forEach(attr => {
+      if (attr.name.startsWith('data-event-')) {
+        element.removeAttribute(attr.name);
+      }
+    });
   }
 
   // Initialize event listeners on elements with class UPME
@@ -50,13 +58,7 @@
     const events = [
       'click', 'mousedown', 'mouseup', 'mouseover', 
       'mouseout', 'mousemove', 'keydown', 'keyup', 
-      'focus', 'blur'
-    ];
-
-    // Specify relevant properties to be captured explicitly
-    const relevantProperties = [
-      'key', 'code', 'type', 'target', 'clientX', 'clientY', 
-      'pageX', 'pageY', 'which', 'button'
+      'focus', 'blur', 'input'
     ];
 
     elements.forEach(element => {
@@ -66,25 +68,14 @@
             element.classList.add(`event-${event}`);
           }
 
-          // Store each relevant key-value pair from the event object as a data- attribute
-          relevantProperties.forEach(prop => {
-            if (prop in evt) {
-              const value = evt[prop];
-              if (value !== undefined && value !== null) {
-                const dataKey = `data-${event}-${prop.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
-                element.setAttribute(dataKey, value.toString());
-              }
-            }
-          });
-
-          // Fallback to capture all other properties
+          // Store each key-value pair from the event object as a data- attribute
           for (const key in evt) {
-            if (evt.hasOwnProperty(key) && !relevantProperties.includes(key)) {
+            if (evt.hasOwnProperty(key)) {
               const value = evt[key];
+              // Skip undefined or null values
               if (value !== undefined && value !== null) {
                 // Convert key to kebab-case for data attributes
-                const dataKey = `data-${event}-${key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
-                // Store as string to ensure compatibility
+                const dataKey = `data-event-${event}-${key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
                 element.setAttribute(dataKey, value.toString());
               }
             }
@@ -104,5 +95,4 @@
 
   // Start the library
   init();
-
 })();
