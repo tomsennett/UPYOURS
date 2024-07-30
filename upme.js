@@ -1,123 +1,108 @@
-(function (global) {
-    class UpdateBus {
-      constructor() {
-        this.updateFunctions = [];
-        this.eventStates = new WeakMap(); // Store event states for elements
-        this.currentElement = null; // To keep track of the current element being processed
-        this.start();
+(function () {
+  'use strict';
+
+  // Helper function to safely execute update functions with context set to the element
+  function safeExecute(func, element) {
+    try {
+      if (typeof func === 'function') {
+        func.call(element);
       }
-  
-      start() {
-        const updateLoop = () => {
-          this.scanDOM();
-          this.runUpdateFunctions();
-          requestAnimationFrame(updateLoop);
-        };
-        requestAnimationFrame(updateLoop);
+    } catch (error) {
+      console.error(`Error executing ${func.name}:`, error);
+    }
+  }
+
+  // The main update function
+  function update() {
+    const elements = document.querySelectorAll('.UPME');
+
+    elements.forEach(element => {
+      // Iterate through all classes of the element
+      element.classList.forEach(cls => {
+        if (cls !== 'UPME') {
+          const updateFunction = window[`UPDATE_${cls}`];
+          safeExecute(updateFunction, element);
+        }
+      });
+    });
+
+    // Remove event classes after update
+    elements.forEach(element => {
+      removeEventClasses(element);
+    });
+
+    requestAnimationFrame(update);
+  }
+
+  function removeEventClasses(element) {
+    const eventClasses = [];
+    element.classList.forEach(cls => {
+      if (cls.startsWith('event-')) {
+        eventClasses.push(cls);
       }
-  
-      stop() {
-        // No need to stop requestAnimationFrame loop as it is automatically managed.
-      }
-  
-      scanDOM() {
-        const elements = document.querySelectorAll('.UPME');
-        elements.forEach(element => {
-          if (!this.eventStates.has(element)) {
-            this.eventStates.set(element, {});
-            const events = ['click', 'mouseover', 'mouseout', 'keydown', 'keyup', 'focus', 'blur'];
-            events.forEach(event => {
-              this.addEventListener(element, event);
-            });
+    });
+    eventClasses.forEach(cls => element.classList.remove(cls));
+  }
+
+  // Initialize event listeners on elements with class UPME
+  function initEventListeners() {
+    const elements = document.querySelectorAll('.UPME');
+    const events = [
+      'click', 'mousedown', 'mouseup', 'mouseover', 
+      'mouseout', 'mousemove', 'keydown', 'keyup', 
+      'focus', 'blur'
+    ];
+
+    // Specify relevant properties to be captured explicitly
+    const relevantProperties = [
+      'key', 'code', 'type', 'target', 'clientX', 'clientY', 
+      'pageX', 'pageY', 'which', 'button'
+    ];
+
+    elements.forEach(element => {
+      events.forEach(event => {
+        element.addEventListener(event, (evt) => {
+          if (!element.classList.contains(`event-${event}`)) {
+            element.classList.add(`event-${event}`);
           }
-          const classes = element.classList;
-          classes.forEach(cls => {
-            if (cls !== 'UPME') {
-              const functionName = `UPME_${cls}`;
-              if (typeof global[functionName] === 'function') {
-                const updateFunction = () => {
-                  this.currentElement = element;
-                  global[functionName].call(element, this_event);
-                  this.currentElement = null;
-                };
-                if (!this.updateFunctions.includes(updateFunction)) {
-                  this.addUpdateFunction(updateFunction);
-                }
+
+          // Store each relevant key-value pair from the event object as a data- attribute
+          relevantProperties.forEach(prop => {
+            if (prop in evt) {
+              const value = evt[prop];
+              if (value !== undefined && value !== null) {
+                const dataKey = `data-${event}-${prop.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
+                element.setAttribute(dataKey, value.toString());
               }
             }
           });
-        });
-      }
-  
-      addUpdateFunction(func) {
-        if (typeof func === 'function') {
-          this.updateFunctions.push(func);
-        }
-      }
-  
-      runUpdateFunctions() {
-        this.updateFunctions.forEach(func => func());
-      }
-  
-      // Check if the current element had a specific event
-      eventOccurred(eventName) {
-        const element = this.currentElement;
-        const state = this.eventStates.get(element);
-        if (state && state[eventName]) {
-          state[eventName] = false; // Reset event state after checking
-          return true;
-        }
-        return false;
-      }
-  
-      // Add event listener to element and track its occurrence
-      addEventListener(element, eventName) {
-        element.addEventListener(eventName, () => {
-          console.log(`Event ${eventName} occurred on`, element);
-          const state = this.eventStates.get(element);
-          state[eventName] = true;
-        });
-      }
-    }
-  
-    // Initialize the update bus with requestAnimationFrame
-    const updateBus = new UpdateBus();
-  
-    global.UPMEBus = {
-      start: () => updateBus.start(),
-      stop: () => updateBus.stop(),
-      addUPMEFunction: (className, func) => {
-        if (typeof func === 'function') {
-          global[`UPME_${className}`] = func;
-        }
-      },
-      eventOccurred: (eventName) => updateBus.eventOccurred(eventName),
-      addEventListener: (element, eventName) => updateBus.addEventListener(element, eventName)
-    };
-  
-    // Simplified UPME object for event checking
-    global.this_event = (eventName) => UPMEBus.eventOccurred(eventName);
-  
-    // Automatically scan for new elements and attach event listeners
-    document.addEventListener('DOMContentLoaded', () => {
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          mutation.addedNodes.forEach(node => {
-            if (node.nodeType === 1 && node.classList.contains('UPME')) {
-              const events = ['click', 'mouseover', 'mouseout', 'keydown', 'keyup', 'focus', 'blur'];
-              events.forEach(event => {
-                UPMEBus.addEventListener(node, event);
-              });
+
+          // Fallback to capture all other properties
+          for (const key in evt) {
+            if (evt.hasOwnProperty(key) && !relevantProperties.includes(key)) {
+              const value = evt[key];
+              if (value !== undefined && value !== null) {
+                // Convert key to kebab-case for data attributes
+                const dataKey = `data-${event}-${key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
+                // Store as string to ensure compatibility
+                element.setAttribute(dataKey, value.toString());
+              }
             }
-          });
+          }
         });
       });
-  
-      observer.observe(document.body, { childList: true, subtree: true });
-  
-      // Initial scan to set up event listeners on existing elements
-      updateBus.scanDOM();
     });
-  
-  })(window);
-  
+  }
+
+  // Initialize the library
+  function init() {
+    document.addEventListener('DOMContentLoaded', () => {
+      initEventListeners();
+      requestAnimationFrame(update);
+    });
+  }
+
+  // Start the library
+  init();
+
+})();

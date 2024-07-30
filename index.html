@@ -1,32 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPME Example</title>
-    <script src="upme.js" defer></script>
+    <title>Event Handling Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .box,
+        .input-box {
+            padding: 20px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .box:hover,
+        .input-box:focus-within {
+            transform: scale(1.05);
+        }
+
+        .clickable {
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+
+        .colorBox {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+        }
+
+        .keyInput,
+        .focusBlur {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .keyInput:focus,
+        .focusBlur:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+    </style>
     <script>
-        // Define the UPME function for the 'clickAlert' class
-        function UPME_clickAlert() {
-            if (this_event('click')) {
-                alert('Button clicked!');
+        // Global variables
+        let totalMouseClicks = 0;
+        let totalMouseMovements = 0;
+        let lastKeyPressed = '';
+
+        // Define update functions for the elements
+        function UPDATE_clickable() {
+            if (this.classList.contains("event-click")) {
+                totalMouseClicks++;
+                this.innerHTML = `Clicks: ${totalMouseClicks}`;
             }
         }
 
-        // Define the UPME function for the 'hoverAlert' class
-        function UPME_hoverAlert() {
-            if (this_event('mouseover')) 
-            {
-                this.style.backgroundColor = 'lightblue';
+        function UPDATE_colorBox() {
+            if (this.classList.contains("event-mouseover")) {
+                this.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
             }
-            else  if (this_event('mouseout'))
-            {
-                this.style.backgroundColor = 'white';
+        }
+
+        function UPDATE_mouseTracker() {
+            if (this.classList.contains("event-mousemove")) {
+                totalMouseMovements++;
+                this.innerHTML = `Mouse Movements: ${totalMouseMovements}`;
+            }
+        }
+
+        function UPDATE_keyInput() {
+            if (this.classList.contains("event-keyup")) {
+                const lastKey = this.getAttribute('data-keyup-key');
+                if (lastKey) {
+                    document.querySelector(".lastKeyBox").value = `Last Key: ${lastKey}`;
+                    console.log(`Last key: ${lastKey}`);
+                } else {
+                    console.log("No key found in data-keyup-key attribute");
+                }
+            }
+        }
+
+
+
+
+        function UPDATE_focusBlur() {
+            if (this.classList.contains("event-focus")) {
+                this.style.borderColor = 'blue';
+            }
+            if (this.classList.contains("event-blur")) {
+                this.style.borderColor = 'red';
             }
         }
     </script>
 </head>
-<body>
-    <button class="UPME clickAlert hoverAlert">Click or Hover Me!</button>
+
+<body class="UPME keyInput">
+    <h1>Interactive Event Demo</h1>
+    <div class="container">
+        <div class="UPME box clickable">Clicks: 0</div>
+        <div class="UPME box colorBox"></div>
+        <div class="UPME box mouseTracker">Mouse Movements: 0</div>
+        <div class="UPME input-box">
+            <input type="text" class="lastKeyBox" placeholder="Press any key" />
+        </div>
+        <div class="UPME input-box">
+            <input type="text" class="UPME focusBlur" placeholder="Focus and Blur" />
+        </div>
+    </div>
+
+    <!-- Include the library script -->
+    <script src="upme.js"></script>
 </body>
+
 </html>
