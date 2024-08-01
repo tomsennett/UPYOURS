@@ -3,163 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPME.js with Bulma - Corrected Demo</title>
+    <title>UPME.js Demo - Comprehensive Event Handling</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
-    <style>
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        .tooltipText {
-            visibility: hidden;
-            width: 120px;
-            background-color: #4a4a4a;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .tooltip:hover .tooltipText {
-            visibility: visible;
-            opacity: 1;
-        }
-        .mirrorDisplay {
-            border: 1px solid #dbdbdb;
-            padding: 10px;
-            min-height: 40px;
-        }
-        .dynamicBg {
-            height: 40px;
-            transition: background-color 0.3s;
-        }
-    </style>
     <script>
-        // Button Click Counter
+        // 1. Button Click Counter
         function UPME_buttonClickCounter() {
-            if (this.classList.contains("event-click")) {
-                let count = parseInt(this.getAttribute('data-click-count')) || 0;
-                count++;
-                this.setAttribute('data-click-count', count);
-                this.textContent = `Button clicked ${count} times`;
+            if (this.event_click) {
+                if (typeof this.clickCount === 'undefined') {
+                    this.clickCount = 0;
+                }
+                this.clickCount += 1;
+                this.textContent = `Button clicked ${this.clickCount} times`;
             }
         }
 
-        // Hover Tooltip
-        function UPME_tooltip() {
-            const tooltipText = this.querySelector('.tooltipText');
-            if (this.classList.contains("event-mouseover") && tooltipText) {
-                tooltipText.style.visibility = 'visible';
-                tooltipText.style.opacity = '1';
-            }
-            if (this.classList.contains("event-mouseout") && tooltipText) {
-                tooltipText.style.visibility = 'hidden';
-                tooltipText.style.opacity = '0';
-            }
-        }
-
-        // Text Input Mirror
+        // 2. Text Input Mirror
         function UPME_textInputMirror() {
-            if (this.classList.contains("event-input")) {
+            if (this.event_input) {
                 const value = this.value;
-                document.querySelector('.mirrorDisplay').textContent = value;
+                const mirrorDisplay = document.querySelector('.mirrorDisplay');
+                if (mirrorDisplay) {
+                    mirrorDisplay.textContent = value;
+                }
             }
         }
 
-        // Number Increment/Decrement
-        function UPME_numberAdjuster() {
-            if (this.classList.contains("event-click")) {
-                let currentValue = parseInt(this.getAttribute('data-value')) || 0;
-                const action = this.getAttribute('data-action');
-                if (action === 'increment') currentValue++;
-                if (action === 'decrement') currentValue--;
-                this.setAttribute('data-value', currentValue);
-                document.querySelector('.numberDisplay').textContent = `Value: ${currentValue}`;
-            }
-        }
-
-        // Toggle Switch
-        function UPME_toggleSwitch() {
-            if (this.classList.contains("event-click")) {
-                const toggleState = this.getAttribute('data-toggle-state') === 'on';
-                this.setAttribute('data-toggle-state', toggleState ? 'off' : 'on');
-                this.textContent = `Toggle is ${toggleState ? 'Off' : 'On'}`;
-            }
-        }
-
-        // Text Area Character Counter
-        function UPME_charCounter() {
-            if (this.classList.contains("event-input")) {
-                const value = this.value;
-                document.querySelector('.charCountDisplay').textContent = `Characters: ${value.length}`;
-            }
-        }
-
-        // Range Slider with Dynamic Background
+        // 3. Range Slider with Dynamic Background
         function UPME_rangeSlider() {
-            if (this.classList.contains("event-input")) {
+            if (this.event_input) {
                 const value = this.value;
-                const bgElement = document.querySelector('.dynamicBg');
-                bgElement.style.backgroundColor = `rgb(${value}, ${255 - value}, ${value / 2})`;
-                document.querySelector('.sliderValueDisplay').textContent = `Slider Value: ${value}`;
+                const dynamicBg = document.querySelector('.dynamicBg');
+                if (dynamicBg) {
+                    dynamicBg.style.backgroundColor = `rgb(${value}, ${255 - value}, ${value / 2})`;
+                }
+                const sliderValueDisplay = document.querySelector('.sliderValueDisplay');
+                if (sliderValueDisplay) {
+                    sliderValueDisplay.textContent = `Slider Value: ${value}`;
+                }
+            }
+        }
+
+        // 4. Toggle Switch
+        function UPME_toggleSwitch() {
+            if (this.event_click) {
+                if (typeof this.toggleState === 'undefined') {
+                    this.toggleState = false;
+                }
+                this.toggleState = !this.toggleState;
+                this.textContent = `Toggle is ${this.toggleState ? 'On' : 'Off'}`;
+            }
+        }
+
+        // 5. Text Area Character Counter
+        function UPME_charCounter() {
+            if (this.event_input) {
+                const value = this.value;
+                const charCountDisplay = document.querySelector('.charCountDisplay');
+                if (charCountDisplay) {
+                    charCountDisplay.textContent = `Characters: ${value.length}`;
+                }
+            }
+        }
+
+        // 6. Checkbox State Display
+        function UPME_checkboxState() {
+            if (this.event_change) {
+                const isChecked = this.checked;
+                const displayElement = this.nextElementSibling;
+                if (displayElement) {
+                    displayElement.textContent = `Checkbox is ${isChecked ? 'Checked' : 'Unchecked'}`;
+                }
+            }
+        }
+
+        // 7. Image Click Counter
+        function UPME_imageClickCounter() {
+            if (this.event_click) {
+                if (typeof this.clickCount === 'undefined') {
+                    this.clickCount = 0;
+                }
+                this.clickCount += 1;
+                const displayElement = this.nextElementSibling;
+                if (displayElement) {
+                    displayElement.textContent = `Image clicked ${this.clickCount} times`;
+                }
+            }
+        }
+
+        // 8. Radio Button Selection Display
+        function UPME_radioSelection() {
+            if (this.event_change) {
+                const selectedRadio = document.querySelector(`[name="${this.name}"]:checked`);
+                const displayElement = document.querySelector('.radioSelectionDisplay');
+                if (selectedRadio && displayElement) {
+                    displayElement.textContent = `Selected: ${selectedRadio.value}`;
+                }
+            }
+        }
+
+        // 9. Double-Click Detector
+        function UPME_doubleClickDetector() {
+            if (this.event_dblclick) {
+                this.textContent = "Button double-clicked!";
+            }
+        }
+
+        // 10. Dropdown Selection Display
+        function UPME_dropdownSelection() {
+            if (this.event_change) {
+                const selectedValue = this.value;
+                const dropdownDisplay = document.querySelector('.dropdownDisplay');
+                if (dropdownDisplay) {
+                    dropdownDisplay.textContent = `Selected: ${selectedValue}`;
+                }
             }
         }
     </script>
 </head>
-<body>
+<body class="UPME">
     <section class="section">
         <div class="container">
-            <h1 class="title">UPME.js with Bulma - Corrected Demo</h1>
-            <p class="subtitle">Explore corrected interactive elements using UPME.js and Bulma.</p>
+            <h1 class="title">UPME.js Demo - Comprehensive Event Handling</h1>
+            <p class="subtitle">Explore various interactive elements with expanded event handling using UPME.js.</p>
 
-            <!-- Button Click Counter -->
+            <!-- 1. Button Click Counter -->
             <div class="box">
-                <button class="button is-primary UPME buttonClickCounter" data-click-count="0">Button clicked 0 times</button>
+                <button class="button is-primary UPME buttonClickCounter">Button clicked 0 times</button>
             </div>
 
-            <!-- Hover Tooltip -->
-            <div class="box">
-                <div class="tooltip UPME tooltip">
-                    Hover over me
-                    <div class="tooltipText">Tooltip text</div>
-                </div>
-            </div>
-
-            <!-- Text Input Mirror -->
+            <!-- 2. Text Input Mirror -->
             <div class="box">
                 <input type="text" class="input UPME textInputMirror" placeholder="Type to mirror...">
                 <div class="mirrorDisplay">Type to mirror...</div>
             </div>
 
-            <!-- Number Increment/Decrement -->
+            <!-- 3. Range Slider with Dynamic Background -->
             <div class="box">
-                <button class="button UPME numberAdjuster" data-action="decrement" data-value="0">-</button>
-                <button class="button UPME numberAdjuster" data-action="increment" data-value="0">+</button>
-                <div class="numberDisplay">Value: 0</div>
+                <input type="range" class="UPME rangeSlider" min="0" max="255" value="128">
+                <div class="box dynamicBg" style="height: 40px;"></div>
+                <div class="sliderValueDisplay">Slider Value: 128</div>
             </div>
 
-            <!-- Toggle Switch -->
+            <!-- 4. Toggle Switch -->
             <div class="box">
-                <button class="button UPME toggleSwitch" data-toggle-state="off">Toggle is Off</button>
+                <button class="button UPME toggleSwitch">Toggle is Off</button>
             </div>
 
-            <!-- Text Area Character Counter -->
+            <!-- 5. Text Area Character Counter -->
             <div class="box">
                 <textarea class="textarea UPME charCounter" placeholder="Start typing..."></textarea>
                 <div class="charCountDisplay">Characters: 0</div>
             </div>
 
-            <!-- Range Slider with Dynamic Background -->
+            <!-- 6. Checkbox State Display -->
             <div class="box">
-                <input type="range" class="UPME rangeSlider" min="0" max="255" value="128">
-                <div class="dynamicBg"></div>
-                <div class="sliderValueDisplay">Slider Value: 128</div>
+                <label class="checkbox">
+                    <input type="checkbox" class="UPME checkboxState">
+                    <span>Checkbox is Unchecked</span>
+                </label>
+            </div>
+
+            <!-- 7. Image Click Counter -->
+            <div class="box">
+                <figure class="image is-128x128 UPME imageClickCounter">
+                    <img src="https://via.placeholder.com/128" alt="Placeholder image">
+                </figure>
+                <div>Image clicked 0 times</div>
+            </div>
+
+            <!-- 8. Radio Button Selection Display -->
+            <div class="box">
+                <label class="radio">
+                    <input type="radio" name="radioGroup" value="Option 1" class="UPME radioSelection">
+                    Option 1
+                </label>
+                <span></span>
+                <label class="radio">
+                    <input type="radio" name="radioGroup" value="Option 2" class="UPME radioSelection">
+                    Option 2
+                </label>
+                <span></span>
+                <div class="radioSelectionDisplay">Selected: Option 1</div>
+            </div>
+
+            <!-- 9. Double-Click Detector -->
+            <div class="box">
+                <button class="button is-primary UPME doubleClickDetector">Double-click me!</button>
+            </div>
+
+            <!-- 10. Dropdown Selection Display -->
+            <div class="box">
+                <div class="select is-primary">
+                    <select class="UPME dropdownSelection">
+                        <option value="Option 1">Option 1</option>
+                        <option value="Option 2">Option 2</option>
+                        <option value="Option 3">Option 3</option>
+                    </select>
+                </div>
+                <div class="dropdownDisplay">Selected: Option 1</div>
             </div>
         </div>
     </section>

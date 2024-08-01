@@ -26,62 +26,97 @@
       });
     });
 
-    // Remove event classes and data attributes after update
+    // Reset event properties after update
     elements.forEach(element => {
-      removeEventClassesAndDataAttributes(element);
-    });
-
-    requestAnimationFrame(update);
-  }
-
-  function removeEventClassesAndDataAttributes(element) {
-    // Remove event- classes
-    const eventClasses = [];
-    element.classList.forEach(cls => {
-      if (cls.startsWith('event-')) {
-        eventClasses.push(cls);
-      }
-    });
-    eventClasses.forEach(cls => element.classList.remove(cls));
-
-    // Remove only data- attributes related to events
-    Array.from(element.attributes).forEach(attr => {
-      if (attr.name.startsWith('data-event-')) {
-        element.removeAttribute(attr.name);
-      }
+      resetEventProperties(element);
     });
   }
 
-  // Initialize event listeners on elements with class UPME
-  function initEventListeners() {
-    const elements = document.querySelectorAll('.UPME');
+  function resetEventProperties(element) {
+    // List of events being tracked
     const events = [
-      'click', 'mousedown', 'mouseup', 'mouseover', 
-      'mouseout', 'mousemove', 'keydown', 'keyup', 
-      'focus', 'blur', 'input'
+      'click', 'mousedown', 'mouseup', 'mouseover', 'mouseout', 'mousemove',
+      'keydown', 'keyup', 'keypress', 'focus', 'blur', 'input', 'change',
+      'submit', 'reset', 'select', 'focusin', 'focusout', 'dblclick',
+      'contextmenu', 'wheel', 'touchstart', 'touchmove', 'touchend',
+      'touchcancel', 'drag', 'dragstart', 'dragend', 'dragover', 'dragenter',
+      'dragleave', 'drop', 'pointerdown', 'pointerup', 'pointermove',
+      'pointerover', 'pointerout', 'pointerenter', 'pointerleave',
+      'pointercancel', 'gotpointercapture', 'lostpointercapture', 'abort',
+      'animationstart', 'animationend', 'animationiteration', 'transitionend',
+      'beforeinput', 'canplay', 'canplaythrough', 'durationchange', 'emptied',
+      'ended', 'error', 'loadeddata', 'loadedmetadata', 'loadstart', 'pause',
+      'play', 'playing', 'progress', 'ratechange', 'seeked', 'seeking', 'stalled',
+      'suspend', 'timeupdate', 'volumechange', 'waiting', 'load', 'resize',
+      'scroll', 'unload', 'beforeunload', 'hashchange', 'popstate', 'storage',
+      'message', 'error', 'offline', 'online', 'pagehide', 'pageshow', 'readystate',
+      'visibilitychange', 'wheel', 'copy', 'cut', 'paste', 'fullscreenchange',
+      'fullscreenerror', 'pointerlockchange', 'pointerlockerror', 'selectionchange'
     ];
 
-    elements.forEach(element => {
-      events.forEach(event => {
-        element.addEventListener(event, (evt) => {
-          if (!element.classList.contains(`event-${event}`)) {
-            element.classList.add(`event-${event}`);
-          }
+    // Set each event property to null
+    events.forEach(event => {
+      element[`event_${event}`] = null;
+    });
+  }
 
-          // Store each key-value pair from the event object as a data- attribute
-          for (const key in evt) {
-            if (evt.hasOwnProperty(key)) {
-              const value = evt[key];
-              // Skip undefined or null values
-              if (value !== undefined && value !== null) {
-                // Convert key to kebab-case for data attributes
-                const dataKey = `data-event-${event}-${key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}`;
-                element.setAttribute(dataKey, value.toString());
-              }
-            }
+  // Initialize event listeners on a specific UPME element
+  function initEventListenersOnElement(element) {
+    const events = [
+      'click', 'mousedown', 'mouseup', 'mouseover', 'mouseout', 'mousemove',
+      'keydown', 'keyup', 'keypress', 'focus', 'blur', 'input', 'change',
+      'submit', 'reset', 'select', 'focusin', 'focusout', 'dblclick',
+      'contextmenu', 'wheel', 'touchstart', 'touchmove', 'touchend',
+      'touchcancel', 'drag', 'dragstart', 'dragend', 'dragover', 'dragenter',
+      'dragleave', 'drop', 'pointerdown', 'pointerup', 'pointermove',
+      'pointerover', 'pointerout', 'pointerenter', 'pointerleave',
+      'pointercancel', 'gotpointercapture', 'lostpointercapture', 'abort',
+      'animationstart', 'animationend', 'animationiteration', 'transitionend',
+      'beforeinput', 'canplay', 'canplaythrough', 'durationchange', 'emptied',
+      'ended', 'error', 'loadeddata', 'loadedmetadata', 'loadstart', 'pause',
+      'play', 'playing', 'progress', 'ratechange', 'seeked', 'seeking', 'stalled',
+      'suspend', 'timeupdate', 'volumechange', 'waiting', 'load', 'resize',
+      'scroll', 'unload', 'beforeunload', 'hashchange', 'popstate', 'storage',
+      'message', 'error', 'offline', 'online', 'pagehide', 'pageshow', 'readystate',
+      'visibilitychange', 'wheel', 'copy', 'cut', 'paste', 'fullscreenchange',
+      'fullscreenerror', 'pointerlockchange', 'pointerlockerror', 'selectionchange'
+    ];
+
+    events.forEach(event => {
+      element.addEventListener(event, (evt) => {
+        // Store the event details in a custom property
+        element[`event_${event}`] = {
+          type: evt.type,
+          timeStamp: evt.timeStamp,
+          target: evt.target,
+          currentTarget: evt.currentTarget,
+          // Additional properties can be added here as needed
+        };
+      });
+    });
+  }
+
+  // Initialize event listeners on all UPME elements
+  function initEventListeners() {
+    const elements = document.querySelectorAll('.UPME');
+    elements.forEach(initEventListenersOnElement);
+  }
+
+  // Use MutationObserver to watch for added nodes and initialize UPME elements
+  function observeDOMChanges() {
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('UPME')) {
+            initEventListenersOnElement(node);
           }
         });
       });
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
     });
   }
 
@@ -89,7 +124,11 @@
   function init() {
     document.addEventListener('DOMContentLoaded', () => {
       initEventListeners();
-      requestAnimationFrame(update);
+      observeDOMChanges();
+      requestAnimationFrame(function loop() {
+        update();
+        requestAnimationFrame(loop);
+      });
     });
   }
 

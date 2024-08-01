@@ -1,40 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
     <style>
+
+        body
+        {
+        }
+        .theTeams
+        {
+            display:flex;
+            justify-content: space-around;
+        }
+        
         .calculator {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 10px;
-            max-width: 300px;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: .5rem;
             margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            flex-basis: 75%;
         }
 
-        .display {
-            grid-column: 1 / span 4;
-            height: 50px;
-            background-color: #f5f5f5;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: right;
-            padding: 10px;
-            font-size: 20px;
+        .theDisplay {
+            grid-column: 1 / span 3;
         }
 
-        .button {
-            height: 50px;
-            background-color: #e0e0e0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 20px;
+        .numButton {
+            
+        }
+
+        .prototype
+        {
+            display: none;
         }
     </style>
 
@@ -42,32 +41,107 @@
 
 <script>
 
-function UPDATE_numButton()
+function UPME_numButton()
+{
+    if (this.myNumber === undefined) 
     {
-        this.innerHTML = this.dataset.val;
-        if (this.classList.contains('event-click'))
-        {
-            let display = document.querySelector('.display');
-            display.innerHTML += this.dataset.val;
-        }
+        this.myNumber = this.dataset.val;
+        this.innerHTML = this.myNumber;
     }
+
+    if (this.classList.contains('event-click'))
+    {
+        let theDisplay = document.querySelector('.theDisplay');
+        if (theDisplay.myString==="000")
+            theDisplay.myString="";
+        theDisplay.myString += ""+this.myNumber;
+    }
+}
+
+function UPME_teamScore()
+{
+    if (this.myScore===undefined)
+    {
+        this.myScore = 501;
+    }
+
+    if (this.classList.contains('event-click'))
+    {
+        let theDisplay = document.querySelector('.theDisplay');
+        let displayNum = parseInt(theDisplay.myString);
+
+        this.myScore-=displayNum;
+
+        let turnButton = document.querySelector('.turnButton.prototype');
+        let newTurnButton = turnButton.cloneNode(true);
+        newTurnButton.classList.remove('prototype');
+        newTurnButton.classList.add('UPME');
+        newTurnButton.myNumber = displayNum;
+
+        this.parentNode.appendChild(newTurnButton);
+        
+
+
+
+        theDisplay.myString = "000";
+    }
+
+    this.innerHTML = this.myScore;
+}
+
+function UPME_turnButton()
+{    
+    this.innerHTML = this.myNumber;
+
+    if (this.classList.contains('event-click'))
+    {
+        this.parentNode.querySelector('.teamScore').myScore+=this.myNumber;
+
+        this.remove();
+    }
+}
+
+function UPME_theDisplay()
+{
+    if (this.myString === undefined) 
+    {
+        this.myString = "000";
+    }
+
+    this.innerHTML = this.myString;
+}
 
 
 </script>
 </head>
 <body>
+    <section class="theTeams">
+        <div class="aTeam red">
+            <button class="UPME teamScore"></h1>
+
+            </button>
+        </div>
+        <div class="aTeam blue">
+            <button class="UPME teamScore"></h1>
+
+            </button>
+        </div>
+        
+    </section>
+
     <div class="calculator">
-        <div class="display"></div>
-        <div class="numButton UPME" data-val="0"></div>
-        <div class="numButton UPME" data-val="1"></div>
-        <div class="numButton UPME" data-val="2"></div>
-        <div class="numButton UPME" data-val="3"></div>
-        <div class="numButton UPME" data-val="4"></div>
-        <div class="numButton UPME" data-val="5"></div>
-        <div class="numButton UPME" data-val="6"></div>
-        <div class="numButton UPME" data-val="7"></div>
-        <div class="numButton UPME" data-val="8"></div>
-        <div class="numButton UPME" data-val="9"></div>
+        <div class="theDisplay UPME"></div>
+        <button class="numButton UPME" data-val="0"></button>
+        <button class="numButton UPME" data-val="1"></button>
+        <button class="numButton UPME" data-val="2"></button>
+        <button class="numButton UPME" data-val="3"></button>
+        <button class="numButton UPME" data-val="4"></button>
+        <button class="numButton UPME" data-val="5"></button>
+        <button class="numButton UPME" data-val="6"></button>
+        <button class="numButton UPME" data-val="7"></button>
+        <button class="numButton UPME" data-val="8"></button>
+        <button class="numButton UPME" data-val="9"></button>
+        <button class="turnButton prototype"></button>
     </div>
 
     
