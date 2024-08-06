@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html data-theme="light">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>Calculator</title>
-    <link rel="stylesheet" href="style.css">
+    <!--<link rel="stylesheet" href="style.css">-->
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.min.css"
+>
+
     <style>
+
+        *
+        {
+            transition: all .5s ease-in-out !important;
+        }
 
         body
         {
@@ -13,6 +23,12 @@
         {
             display:flex;
             justify-content: space-around;
+        }
+
+        .aTeam
+        {
+            display: flex;
+            flex-direction: column;
         }
         
         .calculator {
@@ -31,7 +47,25 @@
             
         }
 
+      
+
         .prototype
+        {
+            display:none;
+        }
+        
+        .collapsed
+        {
+            opacity:0;
+            width:0;
+            height:0;
+            overflow: hidden;
+            padding:0;
+            margin:0;
+            display:contents;
+        }
+
+        .hidden
         {
             display: none;
         }
@@ -49,12 +83,38 @@ function UPME_numButton()
         this.innerHTML = this.myNumber;
     }
 
-    if (this.classList.contains('event-click'))
+    if (this.event_click)
     {
         let theDisplay = document.querySelector('.theDisplay');
-        if (theDisplay.myString==="000")
-            theDisplay.myString="";
-        theDisplay.myString += ""+this.myNumber;
+       // if (theDisplay.myString==="000")
+        //    theDisplay.myString="";
+        
+        let str = theDisplay.myString;
+        if (str.length==3)
+            str = str.substring(1);
+
+
+        str+=""+this.myNumber;
+
+        theDisplay.myString = str;
+    }
+}
+
+function UPME_clearButton()
+{
+    if (this.event_click)
+    {        
+        let theDisplay = document.querySelector('.theDisplay');
+        theDisplay.myString = "000";
+    }
+
+    if (document.querySelector('.theDisplay').myString==="000")
+    {
+       this.disabled = true;
+    }
+    else
+    {
+        this.disabled = false;
     }
 }
 
@@ -65,7 +125,7 @@ function UPME_teamScore()
         this.myScore = 501;
     }
 
-    if (this.classList.contains('event-click'))
+    if (this.event_click)
     {
         let theDisplay = document.querySelector('.theDisplay');
         let displayNum = parseInt(theDisplay.myString);
@@ -80,24 +140,32 @@ function UPME_teamScore()
 
         this.parentNode.appendChild(newTurnButton);
         
-
-
-
         theDisplay.myString = "000";
     }
 
-    this.innerHTML = this.myScore;
+    this.querySelector("h1").innerHTML = this.myScore;
 }
 
 function UPME_turnButton()
 {    
-    this.innerHTML = this.myNumber;
+    var str = ""+this.myNumber;
+    if (str.length==1)
+        str="&nbsp; &nbsp; "+str;
+    else if (str.length==2)
+        str="&nbsp; "+str;
 
-    if (this.classList.contains('event-click'))
+    
+    this.innerHTML = "&#10554; "+str;
+    this.classList.remove('collapsed');
+
+    if (this.event_click)
     {
-        this.parentNode.querySelector('.teamScore').myScore+=this.myNumber;
-
-        this.remove();
+        if (confirm("Remove "+this.myNumber+"?"))
+        {
+            this.parentNode.querySelector('.teamScore').myScore+=this.myNumber;
+            this.remove();
+            document.querySelector(".theDisplay").myString = "000";
+        }
     }
 }
 
@@ -111,22 +179,52 @@ function UPME_theDisplay()
     this.innerHTML = this.myString;
 }
 
+function UPME_addTeamButton()
+{
+    let noTeams = document.querySelectorAll('.aTeam:not(.prototype)').length==0;
+
+    if (this.event_click || noTeams)
+    {
+        let theTeams = document.querySelector('.theTeams');
+        let newTeam = document.querySelector('.aTeam.prototype').cloneNode(true);
+        newTeam.classList.remove('prototype');
+        theTeams.appendChild(newTeam);
+    }
+
+    if (document.querySelectorAll('.turnButton:not(.prototype)').length>0)
+    {
+        this.classList.add('collapsed');
+    }
+    else
+        this.classList.remove('collapsed');    
+
+}
+
+function UPME_resetButton()
+{
+    if (this.event_click)
+    {
+        if (confirm("Are you sure you want to quit?"))
+        {
+           window.location.reload();
+        }
+    }
+}
 
 </script>
 </head>
 <body>
+    
+    <button class="UPME addTeamButton">Add Team</button>
     <section class="theTeams">
-        <div class="aTeam red">
-            <button class="UPME teamScore"></h1>
+        <div class="aTeam prototype">
+            <button class="teamScore UPME">
+                <h1>
 
+                </h1>
             </button>
-        </div>
-        <div class="aTeam blue">
-            <button class="UPME teamScore"></h1>
-
-            </button>
-        </div>
-        
+            
+        </div>     
     </section>
 
     <div class="calculator">
@@ -140,8 +238,10 @@ function UPME_theDisplay()
         <button class="numButton UPME" data-val="6"></button>
         <button class="numButton UPME" data-val="7"></button>
         <button class="numButton UPME" data-val="8"></button>
+        <button class="resetButton UPME">QUIT</button>
         <button class="numButton UPME" data-val="9"></button>
-        <button class="turnButton prototype"></button>
+        <button class="clearButton UPME">CLEAR</button>
+        <button class="turnButton prototype collapsed"></button>
     </div>
 
     

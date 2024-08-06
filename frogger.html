@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frogger-like Game</title>
+    <script>
+
+        let keyEvent = null;
+
+        function UPME_theGame()
+        {
+            //keyEvent = this.event_keydown;
+        }
+
+        function UPME_mover()
+        {
+            this.myX = this.myX || 0;
+            this.myY = this.myY || 0;
+
+            this.style.transform = `translate(${this.myX}px, ${this.myY}px)`;
+        }
+        
+        function UPME_frog()
+        {
+            let keyEvent = document.querySelector(".theGame").event_keydown;
+
+            if (keyEvent)
+            {
+                console.log(keyEvent);
+                if (keyEvent.key === 'ArrowUp') {
+                    this.myY -= 10;
+                } else if (keyEvent.key === 'ArrowDown') {
+                    this.myY += 10;
+                } else if (keyEvent.key === 'ArrowLeft') {
+                    this.myX -= 10;
+                } else if (keyEvent.key === 'ArrowRight') {
+                    this.myX += 10;
+                }
+            }
+        }
+
+    </script>
+</head>
+<body class="UPME theGame">
+    <img src="frog.jpg" class="UPME frog mover" />
+    
+<script src="upme.js" defer></script>
+</body>
+</html>

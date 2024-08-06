@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPME.js Demo - Comprehensive Event Handling</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <title>UPME.js Demo with Pico.css</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <style>
+        .dynamicBg {
+            height: 40px;
+            transition: background-color 0.3s;
+        }
+    </style>
     <script>
         // 1. Button Click Counter
         function UPME_buttonClickCounter() {
@@ -21,10 +27,7 @@
         function UPME_textInputMirror() {
             if (this.event_input) {
                 const value = this.value;
-                const mirrorDisplay = document.querySelector('.mirrorDisplay');
-                if (mirrorDisplay) {
-                    mirrorDisplay.textContent = value;
-                }
+                document.querySelector('.mirrorDisplay').textContent = value;
             }
         }
 
@@ -36,10 +39,7 @@
                 if (dynamicBg) {
                     dynamicBg.style.backgroundColor = `rgb(${value}, ${255 - value}, ${value / 2})`;
                 }
-                const sliderValueDisplay = document.querySelector('.sliderValueDisplay');
-                if (sliderValueDisplay) {
-                    sliderValueDisplay.textContent = `Slider Value: ${value}`;
-                }
+                document.querySelector('.sliderValueDisplay').textContent = `Slider Value: ${value}`;
             }
         }
 
@@ -58,152 +58,95 @@
         function UPME_charCounter() {
             if (this.event_input) {
                 const value = this.value;
-                const charCountDisplay = document.querySelector('.charCountDisplay');
-                if (charCountDisplay) {
-                    charCountDisplay.textContent = `Characters: ${value.length}`;
-                }
+                document.querySelector('.charCountDisplay').textContent = `Characters: ${value.length}`;
             }
         }
 
-        // 6. Checkbox State Display
-        function UPME_checkboxState() {
+        // 6. Dropdown Selection Display
+        function UPME_dropdownSelection() {
             if (this.event_change) {
-                const isChecked = this.checked;
-                const displayElement = this.nextElementSibling;
-                if (displayElement) {
-                    displayElement.textContent = `Checkbox is ${isChecked ? 'Checked' : 'Unchecked'}`;
-                }
+                const selectedValue = this.value;
+                document.querySelector('.dropdownDisplay').textContent = `Selected: ${selectedValue}`;
             }
         }
 
-        // 7. Image Click Counter
-        function UPME_imageClickCounter() {
-            if (this.event_click) {
-                if (typeof this.clickCount === 'undefined') {
-                    this.clickCount = 0;
-                }
-                this.clickCount += 1;
-                const displayElement = this.nextElementSibling;
-                if (displayElement) {
-                    displayElement.textContent = `Image clicked ${this.clickCount} times`;
-                }
-            }
-        }
-
-        // 8. Radio Button Selection Display
-        function UPME_radioSelection() {
-            if (this.event_change) {
-                const selectedRadio = document.querySelector(`[name="${this.name}"]:checked`);
-                const displayElement = document.querySelector('.radioSelectionDisplay');
-                if (selectedRadio && displayElement) {
-                    displayElement.textContent = `Selected: ${selectedRadio.value}`;
-                }
-            }
-        }
-
-        // 9. Double-Click Detector
+        // 7. Double-Click Detector
         function UPME_doubleClickDetector() {
             if (this.event_dblclick) {
                 this.textContent = "Button double-clicked!";
             }
         }
 
-        // 10. Dropdown Selection Display
-        function UPME_dropdownSelection() {
-            if (this.event_change) {
-                const selectedValue = this.value;
-                const dropdownDisplay = document.querySelector('.dropdownDisplay');
-                if (dropdownDisplay) {
-                    dropdownDisplay.textContent = `Selected: ${selectedValue}`;
+        // 8. Key Press Display
+        function UPME_keyPressDisplay() 
+        {
+            if (this.event_keyup) {
+                const keyPressed = this.event_keyup.key;
+                if (keyPressed) {
+                    document.querySelector('.keyDisplay').textContent = `Key Pressed: ${keyPressed}`;
+                } else {
+                    document.querySelector('.keyDisplay').textContent = `Key Pressed: None`;
                 }
             }
         }
+
     </script>
 </head>
 <body class="UPME">
-    <section class="section">
-        <div class="container">
-            <h1 class="title">UPME.js Demo - Comprehensive Event Handling</h1>
-            <p class="subtitle">Explore various interactive elements with expanded event handling using UPME.js.</p>
+    <main class="container">
+        <h1 class="title">UPME.js Demo with Pico.css</h1>
+        <p class="lead">Explore various interactive elements using UPME.js and Pico.css.</p>
 
-            <!-- 1. Button Click Counter -->
-            <div class="box">
-                <button class="button is-primary UPME buttonClickCounter">Button clicked 0 times</button>
-            </div>
+        <!-- 1. Button Click Counter -->
+        <article>
+            <button class="UPME buttonClickCounter">Button clicked 0 times</button>
+        </article>
 
-            <!-- 2. Text Input Mirror -->
-            <div class="box">
-                <input type="text" class="input UPME textInputMirror" placeholder="Type to mirror...">
-                <div class="mirrorDisplay">Type to mirror...</div>
-            </div>
+        <!-- 2. Text Input Mirror -->
+        <article>
+            <input type="text" class="UPME textInputMirror" placeholder="Type to mirror...">
+            <p class="mirrorDisplay">Type to mirror...</p>
+        </article>
 
-            <!-- 3. Range Slider with Dynamic Background -->
-            <div class="box">
-                <input type="range" class="UPME rangeSlider" min="0" max="255" value="128">
-                <div class="box dynamicBg" style="height: 40px;"></div>
-                <div class="sliderValueDisplay">Slider Value: 128</div>
-            </div>
+        <!-- 3. Range Slider with Dynamic Background -->
+        <article>
+            <input type="range" class="UPME rangeSlider" min="0" max="255" value="128">
+            <div class="dynamicBg"></div>
+            <p class="sliderValueDisplay">Slider Value: 128</p>
+        </article>
 
-            <!-- 4. Toggle Switch -->
-            <div class="box">
-                <button class="button UPME toggleSwitch">Toggle is Off</button>
-            </div>
+        <!-- 4. Toggle Switch -->
+        <article>
+            <button class="UPME toggleSwitch">Toggle is Off</button>
+        </article>
 
-            <!-- 5. Text Area Character Counter -->
-            <div class="box">
-                <textarea class="textarea UPME charCounter" placeholder="Start typing..."></textarea>
-                <div class="charCountDisplay">Characters: 0</div>
-            </div>
+        <!-- 5. Text Area Character Counter -->
+        <article>
+            <textarea class="UPME charCounter" placeholder="Start typing..."></textarea>
+            <p class="charCountDisplay">Characters: 0</p>
+        </article>
 
-            <!-- 6. Checkbox State Display -->
-            <div class="box">
-                <label class="checkbox">
-                    <input type="checkbox" class="UPME checkboxState">
-                    <span>Checkbox is Unchecked</span>
-                </label>
-            </div>
+        <!-- 6. Dropdown Selection Display -->
+        <article>
+            <select class="UPME dropdownSelection">
+                <option value="Option 1">Option 1</option>
+                <option value="Option 2">Option 2</option>
+                <option value="Option 3">Option 3</option>
+            </select>
+            <p class="dropdownDisplay">Selected: Option 1</p>
+        </article>
 
-            <!-- 7. Image Click Counter -->
-            <div class="box">
-                <figure class="image is-128x128 UPME imageClickCounter">
-                    <img src="https://via.placeholder.com/128" alt="Placeholder image">
-                </figure>
-                <div>Image clicked 0 times</div>
-            </div>
+        <!-- 7. Double-Click Detector -->
+        <article>
+            <button class="UPME doubleClickDetector">Double-click me!</button>
+        </article>
 
-            <!-- 8. Radio Button Selection Display -->
-            <div class="box">
-                <label class="radio">
-                    <input type="radio" name="radioGroup" value="Option 1" class="UPME radioSelection">
-                    Option 1
-                </label>
-                <span></span>
-                <label class="radio">
-                    <input type="radio" name="radioGroup" value="Option 2" class="UPME radioSelection">
-                    Option 2
-                </label>
-                <span></span>
-                <div class="radioSelectionDisplay">Selected: Option 1</div>
-            </div>
-
-            <!-- 9. Double-Click Detector -->
-            <div class="box">
-                <button class="button is-primary UPME doubleClickDetector">Double-click me!</button>
-            </div>
-
-            <!-- 10. Dropdown Selection Display -->
-            <div class="box">
-                <div class="select is-primary">
-                    <select class="UPME dropdownSelection">
-                        <option value="Option 1">Option 1</option>
-                        <option value="Option 2">Option 2</option>
-                        <option value="Option 3">Option 3</option>
-                    </select>
-                </div>
-                <div class="dropdownDisplay">Selected: Option 1</div>
-            </div>
-        </div>
-    </section>
+        <!-- 8. Key Press Display -->
+        <article>
+            <input type="text" class="UPME keyPressDisplay" placeholder="Press any key">
+            <p class="keyDisplay">Key Pressed: None</p>
+        </article>
+    </main>
 
     <!-- Include the UPME.js library -->
     <script src="upme.js"></script>
