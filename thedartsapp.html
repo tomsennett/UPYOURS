@@ -18,7 +18,11 @@
 
         body
         {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            height:100%;
         }
+
         .theTeams
         {
             display:flex;
@@ -27,8 +31,15 @@
 
         .aTeam
         {
-            display: flex;
-            flex-direction: column;
+            display: block;
+            max-height: 100%;
+            overflow:hidden;
+            border:1px solid red;
+        }
+
+        .turnButton
+        {
+            display:block;
         }
         
         .calculator {
@@ -211,19 +222,39 @@ function UPME_resetButton()
     }
 }
 
+function UPME_removeTeamButton()
+{
+    if (this.event_click)
+    {
+        if (confirm("Remove Team?"))
+        {
+            this.parentNode.remove();
+        }
+    }
+
+    if (document.querySelectorAll('.aTeam:not(.prototype)').length==1 || document.querySelectorAll('.turnButton:not(.prototype)').length>0)
+    {
+        this.classList.add('collapsed');
+    }
+    else
+        this.classList.remove('collapsed');
+}
+
 </script>
 </head>
 <body>
     
-    <button class="UPME addTeamButton">Add Team</button>
     <section class="theTeams">
+        <button class="UPME addTeamButton">Add Team</button>
         <div class="aTeam prototype">
             <button class="teamScore UPME">
                 <h1>
 
                 </h1>
             </button>
-            
+            <button class="UPME removeTeamButton">
+                Remove Team
+            </button>
         </div>     
     </section>
 
