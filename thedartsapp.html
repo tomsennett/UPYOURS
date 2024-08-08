@@ -7,36 +7,78 @@
     <title>Calculator</title>
     <!--<link rel="stylesheet" href="style.css">-->
     <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.min.css"
->
-
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.min.css"
+  >
     <style>
+
+        @keyframes fadeIn 
+        {
+            from 
+            {
+                transform:scale(0);
+                height:0;
+            }
+            to 
+            {
+                transform: scale(1);
+            }         
+        }
 
         *
         {
-            transition: all .5s ease-in-out !important;
+            animation: fadeIn .25s ease-out;
+            transition:all .25s ease-out !important;
+        }
+
+        :root {
+
+
+
+
+            --blue: #3d6dff;
+            --black: #000000;
+            --white: #ffffff;
+            --red: #f03f35;
+            --yellow: #ffe400;
+            --green: #51b948;
+            --orange: #f78f1e;
+            --gold: #e7b70d;
+            --grey: #f0f0f0;
+            --brown: #814b10;
+            
+            
+            --fntText: monospace;
+            --fntBody: 'Trebuchet MS', sans-serif;
+            
+            --darkGreen: #045128;
+            --darkRed: #68001d;
+            --darkBlue: #3504b0;
+            
+            --light:300;
+            --regular:500;
         }
 
         html
         {
             height:100%;
-            font-size: 3vh;
+            font-size: calc(((1vh + 1vw)/2)*2.5);
             background-color: black;
             text-align: center;
-            touch-action: manipulation;
+            touch-action: none;
+            font-family: var(--fntText);
         }
 
         button
         {
-            background-color: black;
-            color:white;
-            border-color:white;
+            background-color: var(--yellow);
+            color:black;
+            border:2px solid black;
+
         }
 
         body
         {
-            padding:1rem;
             display: grid;
             grid-template-rows: 1fr 1fr;
             height:100%;
@@ -45,6 +87,14 @@
         h1, h2, h3, h4, h5, h6
         {
             color:white;
+            font-family: var(--fntText);
+            margin:0;
+        }
+
+        .topSection
+        {
+            overflow:hidden;
+            height:100%;
         }
 
         .theTeams
@@ -52,19 +102,34 @@
             display:flex;
             width:100%;
             overflow: hidden;
+            align-items: flex-start;
+        }
+
+        .theTeamsMenu
+        {
+            display:flex;
+            width:100%;
+            align-items: center;
+            justify-items: center;
+            justify-content: center;
         }
 
         .aTeam
         {
             height: 100%;
+            flex-basis: 100%;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .aTeam, .aTeam *
+        .teamScore
         {
-            width:100%;
-
+            width: 100%;
+            max-width: 50vw;
         }
+
 
         .aTurnList
         {
@@ -74,52 +139,170 @@
         .turnButton
         {
             display:block;
-            width: 100%;
+            background-color: transparent;
+        }
+
+        .turnButton.last
+        {
+            color:var(--yellow) !important;
+            border:2px dashed var(--yellow) !important;
         }
         
-        .calculator {
+        .calculator 
+        {
             width:100%;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            grid-gap: 1rem;
-            flex-basis: 75%;
+         
+            flex-basis: 100%;
         }
 
-        .theDisplayyyy {
-            grid-column: 1 / span 3;
+        .theDisplay
+        {
             text-align: center;
+            font-size:2rem;
+            color:var(--yellow);
         }
-
-        .numButton {
-            
-        }
-
-      
 
         .prototype
         {
             display:none;
+            opacity:0;
         }
         
         .collapsed
         {
-            opacity:0;
-            overflow: hidden;
-            padding:0;
-            margin:0;
-            display:contents;
             transform: scale(0);
+            width:0;
+            height:0;
+            padding: 0;
+            margin:0;
+            font-size: 0;
         }
 
         .hidden
         {
             display: none;
         }
+
+        .touched
+        {
+            background-color: white !important;
+            color:black;
+            
+            transition:none !important;
+        }
+
+        .destroying
+        {
+           transform: scale(0);
+        }
+
+        .disabled
+        {
+            opacity:.5;
+        }
+
+    
+
+        .teamScoreEnterButton
+        {
+            overflow: visible;
+        }
+        
+
+        .teamScore h1
+        {
+            font-size: 3.5rem;
+            overflow: visible;
+        }
+
+        button:disabled
+        {
+            opacity:.25;
+        }
+
+        .addTeamButton, .removeTeamButton, .resetButton, .clearButton
+        {
+            font-size: .75rem;
+            background-color:var(--black);
+        }
+
+        .addTeamButton
+        {   
+            color: var(--green);
+            border-color:var(--green);
+            align-self:flex-end;
+        }
+
+        .removeTeamButton
+        {   
+            color: var(--red);
+            border-color:var(--red);
+            align-self:flex-end;
+        }
+
+        .resetButton
+        {
+            color: var(--blue);
+            border-color:var(--blue);
+        }
+
+        .clearButton
+        {
+            color: var(--yellow);
+            border-color:var(--yellow);
+        }
+
     </style>
 
     
 
 <script>
+
+
+UPME["button"] = function()
+{
+    this.wasTouched = false;
+
+    if (this.cooldown > 0)
+        this.cooldown--;
+    else
+    {
+        if (this.event_touchstart || this.event_mousedown)
+        {
+            this.classList.add('touched');
+        }
+
+        if (this.event_touchend || this.event_mouseup || this.event_touchcancel)
+        {
+            if (this.classList.contains('touched'))
+            {
+                this.wasTouched = true;
+                this.cooldown=3;
+                this.classList.remove('touched');
+            }
+        }
+    }
+}
+
+
+UPME[".destroying"] = function()
+{
+    this.disabled=true;
+
+    if (this.event_transitionend)
+    {
+        if (this.event_transitionend.propertyName==="transform")
+            this.remove();
+    }
+
+    if (this.event_transitioncancel)
+    {
+        this.remove();
+    }
+    
+}
     
 
 UPME[".numButton"] = function()
@@ -127,10 +310,11 @@ UPME[".numButton"] = function()
     if (this.myNumber === undefined) 
     {
         this.myNumber = this.dataset.val;
-        this.innerHTML = this.myNumber;
     }
 
-    if (this.event_touchstart)
+    this.innerHTML = this.myNumber;
+
+    if (this.wasTouched)
     {
         let theDisplay = document.querySelector('.theDisplay');
         
@@ -145,7 +329,7 @@ UPME[".numButton"] = function()
 
 UPME[".clearButton"] = function()
 {
-    if (this.event_click)
+    if (this.wasTouched)
     {        
         let theDisplay = document.querySelector('.theDisplay');
         theDisplay.myString = "000";
@@ -163,53 +347,86 @@ UPME[".clearButton"] = function()
 
 UPME[".teamScore"] = function()
 {
-    if (this.myScore===undefined)
+    if (this.myScore === undefined) 
     {
         this.myScore = 501;
     }
 
-    if (this.event_click)
+    this.querySelector("h1").innerHTML = this.myScore;
+}
+
+UPME[".teamScoreEnterButton"] = function()
+{
+    if (this.wasTouched)
     {
         let theDisplay = document.querySelector('.theDisplay');
         let displayNum = parseInt(theDisplay.myString);
 
-        this.myScore-=displayNum;
+        this.parentNode.myScore-=displayNum;
+
+        document.querySelectorAll('.turnButton').forEach(function(e)
+        {
+            e.classList.remove('last');
+        });
 
         let turnButton = document.querySelector('.turnButton.prototype');
         let newTurnButton = turnButton.cloneNode(true);
         newTurnButton.classList.remove('prototype');
-        newTurnButton.classList.add('UPME');
         newTurnButton.myNumber = displayNum;
+        newTurnButton.classList.add('last');
 
-        this.parentNode.querySelector(".aTurnList").prepend(newTurnButton);
+        this.parentNode.parentNode.querySelector(".aTurnList").prepend(newTurnButton);
         
         theDisplay.myString = "000";
     }
 
-    this.querySelector("h1").innerHTML = this.myScore;
+}
+
+
+
+UPME[".teamScore h1"] = function()
+{
+
 }
 
 UPME[".turnButton"] = function()
 {    
     var str = ""+this.myNumber;
     if (str.length==1)
-        str="&nbsp; &nbsp; "+str;
+        str="&nbsp;&nbsp;"+str;
     else if (str.length==2)
-        str="&nbsp; "+str;
+        str="&nbsp;"+str;
 
     
     this.innerHTML = "&#10554; "+str;
-    this.classList.remove('collapsed');
 
-    if (this.event_click)
+    if (this.wasTouched)
     {
-        if (confirm("Remove "+this.myNumber+"?"))
-        {
+       // if (confirm("Remove "+this.myNumber+"?"))
+        //{
             this.parentNode.parentNode.querySelector('.teamScore').myScore+=this.myNumber;
-            this.remove();
+            this.classList.add('destroying');
             document.querySelector(".theDisplay").myString = "000";
-        }
+        //}
     }
+    var siblings = Array.from(this.parentNode.children);
+    var index = siblings.indexOf(this);
+    
+    if (index==1)
+    {
+        this.style.transform = "scale(.75)";
+        this.style.marginTop="-5%";
+    }
+    else if (index==2)
+    {
+        this.style.transform = "scale(.5)";
+        this.style.marginTop="-15%";
+    }
+    else if (index>=3)
+        this.style.transform = "scale(0)";
+
+        
+    
 }
 
 UPME[".theDisplay"] = function()
@@ -219,37 +436,42 @@ UPME[".theDisplay"] = function()
         this.myString = "000";
     }
 
+    if (this.myString == "000")
+        this.classList.add('disabled');
+    else   
+        this.classList.remove('disabled');
+
     this.innerHTML = this.myString;
 }
 
-UPME[".theTeamsMenu"] = function()
+UPME[".addTeamButton, .removeTeamButton"] = function()
 {
     if (document.querySelectorAll('.turnButton:not(.prototype)').length>0)
     {
-        this.classList.add('hidden');
+        this.classList.add('collapsed');
     }
     else
-        this.classList.remove('hidden');
+        this.classList.remove('collapsed');
 }
 
 UPME[".addTeamButton"] = function()
 {
     let noTeams = document.querySelectorAll('.aTeam:not(.prototype)').length==0;
 
-    if (this.event_click || noTeams)
+    if (this.wasTouched || noTeams)
     {
         let theTeams = document.querySelector('.theTeams');
         let newTeam = document.querySelector('.aTeam.prototype').cloneNode(true);
         newTeam.classList.remove('prototype');
-        theTeams.appendChild(newTeam);
+        theTeams.append(newTeam);
     }
 
-    if (document.querySelectorAll('.turnButton:not(.prototype)').length>0)
+    /*if (document.querySelectorAll('.turnButton:not(.prototype)').length>0)
     {
         this.classList.add('collapsed');
     }
     else
-        this.classList.remove('collapsed');    
+        this.classList.remove('collapsed');   */ 
 
 
         let theDisplay = document.querySelector('.theDisplay');
@@ -267,7 +489,7 @@ UPME[".addTeamButton"] = function()
 
 UPME[".resetButton"] = function()
 {
-    if (this.event_click)
+    if (this.wasTouched)
     {
         if (confirm("Are you sure you want to quit?"))
         {
@@ -278,10 +500,10 @@ UPME[".resetButton"] = function()
 
 UPME[".removeTeamButton"] = function()
 {
-    if (this.event_click && !this.classList.contains('collapsed'))
+    if (this.wasTouched && !this.classList.contains('collapsed'))
     {
            let teams = document.querySelectorAll('.aTeam:not(.prototype)');
-           teams[teams.length-1].remove();
+           teams[teams.length-1].classList.add('destroying');
     }
     
 
@@ -298,51 +520,78 @@ UPME[".removeTeamButton"] = function()
 
 }
 
+
+UPME[".aTeam"] = function()
+{
+    if (this.myColor === undefined)
+    {
+        let ind = document.querySelectorAll('.aTeam:not(.prototype)').length-1;
+        let colors = ["var(--blue)", "var(--red)", "var(--yellow)", "var(--green)", "var(--orange)", "var(--gold)", "var(--grey)", "var(--brown)"];
+        this.myColor = colors[ind];
+        
+    }
+
+    
+    this.querySelector('h1').style.color = this.myColor;
+        this.querySelector('.teamScoreEnterButton').style.backgroundColor = this.myColor;
+        this.querySelector('.turnButton').style.borderColor = this.myColor;
+        this.querySelector('.turnButton').style.color = this.myColor;
+}
+
 </script>
 </head>
 <body>
-    
-    <section class="theTeams">
-        <section class="theTeamsMenu">
-            <button class="UPME addTeamButton">
-                Add Team
-            </button>
-            <button class="UPME removeTeamButton">
-                Remove Team
-            </button>
-        </section>
+    <div class="topSection">
         
-        <div class="aTeam prototype">
-            <button class="teamScore UPME">
-                <h1>
-
-                </h1>
-            </button>
+        
+        <section class="theTeams">
             
-            <div class="aTurnList">
-                    <button class="turnButton prototype collapsed"></button>
-            </div>
-        </div>     
-    </section>
+            <div class="aTeam prototype">
+                <div class="teamScore">
+                    <h1 class="teamScoreDisplay">
+
+                    </h1>
+                    <button class="teamScoreEnterButton">
+                        ENTER
+                    </button>
+                </div>
+                
+                <div class="aTurnList">
+                    <button class="turnButton prototype"></button>
+                </div>
+            </div>    
+            
+            
+        </section>
+
+        
+    </div>
+    
     
 
     <div class="calculator">
             
-            
-            
-            <h2 class="theDisplay UPME"></h2>
-        <button class="numButton UPME" data-val="0"></button>
-        <button class="numButton UPME" data-val="1"></button>
-        <button class="numButton UPME" data-val="2"></button>
-        <button class="numButton UPME" data-val="3"></button>
-        <button class="numButton UPME" data-val="4"></button>
-        <button class="numButton UPME" data-val="5"></button>
-        <button class="numButton UPME" data-val="6"></button>
-        <button class="numButton UPME" data-val="7"></button>
-        <button class="numButton UPME" data-val="8"></button>
-        <button class="resetButton UPME">QUIT</button>
-        <button class="numButton UPME" data-val="9"></button>
-        <button class="clearButton UPME">CLEAR</button>
+        <button class="removeTeamButton">
+            REMOVE TEAM
+        </button>
+            <h2 class="theDisplay"></h2>
+           
+            <button class="addTeamButton">
+                ADD TEAM
+            </button>
+       
+        <button class="numButton" data-val="1"></button>
+        <button class="numButton" data-val="2"></button>
+        <button class="numButton" data-val="3"></button>
+        <button class="numButton" data-val="4"></button>
+        <button class="numButton" data-val="5"></button>
+        <button class="numButton" data-val="6"></button>
+        <button class="numButton" data-val="7"></button>
+        <button class="numButton" data-val="8"></button>
+        <button class="numButton" data-val="9"></button>
+        <button class="resetButton">QUIT</button>
+        <button class="numButton" data-val="0"></button>
+        <button class="clearButton">CLEAR</button>
     </div>
 
 </body>
