@@ -260,7 +260,7 @@
 
 <script>
 
-
+//Functionality for all buttons, which detects both touch and mouse events intelligently and can be checked for a 'click' with this.wasTouched
 UPME["button"] = function()
 {
     this.wasTouched = false;
@@ -286,7 +286,7 @@ UPME["button"] = function()
     }
 }
 
-
+//Wait for CSS transition to finish and then remove the element
 UPME[".destroying"] = function()
 {
     this.disabled=true;
@@ -305,6 +305,7 @@ UPME[".destroying"] = function()
 }
     
 
+//Numpad buttons
 UPME[".numButton"] = function()
 {
     if (this.myNumber === undefined) 
@@ -327,6 +328,7 @@ UPME[".numButton"] = function()
     }
 }
 
+//Clear button
 UPME[".clearButton"] = function()
 {
     if (this.wasTouched)
@@ -345,6 +347,7 @@ UPME[".clearButton"] = function()
     }
 }
 
+//Team score display
 UPME[".teamScore"] = function()
 {
     if (this.myScore === undefined) 
@@ -355,6 +358,7 @@ UPME[".teamScore"] = function()
     this.querySelector("h1").innerHTML = this.myScore;
 }
 
+//Enter button for team score
 UPME[".teamScoreEnterButton"] = function()
 {
     if (this.wasTouched)
@@ -383,12 +387,7 @@ UPME[".teamScoreEnterButton"] = function()
 }
 
 
-
-UPME[".teamScore h1"] = function()
-{
-
-}
-
+//Undo button for turn
 UPME[".turnButton"] = function()
 {    
     var str = ""+this.myNumber;
@@ -429,6 +428,7 @@ UPME[".turnButton"] = function()
     
 }
 
+//Display for the numpad
 UPME[".theDisplay"] = function()
 {
     if (this.myString === undefined) 
@@ -444,6 +444,7 @@ UPME[".theDisplay"] = function()
     this.innerHTML = this.myString;
 }
 
+//Hide and show the add/remove team buttons
 UPME[".addTeamButton, .removeTeamButton"] = function()
 {
     if (document.querySelectorAll('.turnButton:not(.prototype)').length>0)
@@ -454,6 +455,7 @@ UPME[".addTeamButton, .removeTeamButton"] = function()
         this.classList.remove('collapsed');
 }
 
+//Add a new team
 UPME[".addTeamButton"] = function()
 {
     let noTeams = document.querySelectorAll('.aTeam:not(.prototype)').length==0;
@@ -465,39 +467,21 @@ UPME[".addTeamButton"] = function()
         newTeam.classList.remove('prototype');
         theTeams.append(newTeam);
     }
+    
+    let theDisplay = document.querySelector('.theDisplay');
 
-    /*if (document.querySelectorAll('.turnButton:not(.prototype)').length>0)
+    if (theDisplay.myString==="000")
     {
-        this.classList.add('collapsed');
+        this.disabled = false;
     }
     else
-        this.classList.remove('collapsed');   */ 
-
-
-        let theDisplay = document.querySelector('.theDisplay');
-
-        if (theDisplay.myString==="000")
-        {
-            this.disabled = false;
-        }
-        else
-        {
-            this.disabled = true;
-        }
-
-}
-
-UPME[".resetButton"] = function()
-{
-    if (this.wasTouched)
     {
-        if (confirm("Are you sure you want to quit?"))
-        {
-           window.location.reload();
-        }
+        this.disabled = true;
     }
 }
 
+
+//Remove a team
 UPME[".removeTeamButton"] = function()
 {
     if (this.wasTouched && !this.classList.contains('collapsed'))
@@ -521,6 +505,19 @@ UPME[".removeTeamButton"] = function()
 }
 
 
+//Reset button
+UPME[".resetButton"] = function()
+{
+    if (this.wasTouched)
+    {
+        if (confirm("Are you sure you want to quit?"))
+        {
+           window.location.reload();
+        }
+    }
+}
+
+//Team color
 UPME[".aTeam"] = function()
 {
     if (this.myColor === undefined)
@@ -528,14 +525,13 @@ UPME[".aTeam"] = function()
         let ind = document.querySelectorAll('.aTeam:not(.prototype)').length-1;
         let colors = ["var(--blue)", "var(--red)", "var(--yellow)", "var(--green)", "var(--orange)", "var(--gold)", "var(--grey)", "var(--brown)"];
         this.myColor = colors[ind];
-        
     }
 
     
     this.querySelector('h1').style.color = this.myColor;
-        this.querySelector('.teamScoreEnterButton').style.backgroundColor = this.myColor;
-        this.querySelector('.turnButton').style.borderColor = this.myColor;
-        this.querySelector('.turnButton').style.color = this.myColor;
+    this.querySelector('.teamScoreEnterButton').style.backgroundColor = this.myColor;
+    this.querySelector('.turnButton').style.borderColor = this.myColor;
+    this.querySelector('.turnButton').style.color = this.myColor;
 }
 
 </script>
