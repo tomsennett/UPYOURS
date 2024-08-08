@@ -1,8 +1,8 @@
 (function () {
   'use strict';
 
-  // Set to keep track of elements with the UPME class
-  const currentUPMEElements = new Set();
+  // Global object to store functions keyed by selectors
+  const UPME = {};
 
   // Helper function to safely execute UPME functions with context set to the element
   function safeExecute(func, element) {
@@ -11,7 +11,7 @@
         func.call(element);
       }
     } catch (error) {
-      console.error(`Error executing ${func.name}:`, error);
+      console.error(`Error executing function for ${element}:`, error);
     }
   }
 
@@ -76,25 +76,29 @@
     });
   }
 
+  // Set to keep track of elements with the UPME class
+  const currentUPMEElements = new Set();
+
   // The main update function
   function update() {
     const elements = document.querySelectorAll('*');
     const newUPMEElements = new Set();
 
     elements.forEach(element => {
-      if (element.classList.contains('UPME')) {
+      let hasMatchingSelector = false;
+
+      for (const selector in UPME) {
+        if (element.matches(selector)) {
+          hasMatchingSelector = true;
+          safeExecute(UPME[selector], element);
+        }
+      }
+
+      if (hasMatchingSelector) {
         newUPMEElements.add(element);
         if (!currentUPMEElements.has(element)) {
           addEventListeners(element);
         }
-
-        // Iterate through all classes of the element and execute corresponding functions
-        element.classList.forEach(cls => {
-          if (cls !== 'UPME') {
-            const updateFunction = window[`UPME_${cls}`];
-            safeExecute(updateFunction, element);
-          }
-        });
       } else if (currentUPMEElements.has(element)) {
         removeEventListeners(element);
       }
@@ -154,6 +158,9 @@
       });
     });
   }
+
+  // Expose UPME to the global scope
+  window.UPME = UPME;
 
   // Start the library
   init();

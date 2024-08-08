@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html data-theme="light">
 <head>
+    
+    <script src="upme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <title>Calculator</title>
     <!--<link rel="stylesheet" href="style.css">-->
@@ -16,42 +18,76 @@
             transition: all .5s ease-in-out !important;
         }
 
+        html
+        {
+            height:100%;
+            font-size: 3vh;
+            background-color: black;
+            text-align: center;
+            touch-action: manipulation;
+        }
+
+        button
+        {
+            background-color: black;
+            color:white;
+            border-color:white;
+        }
+
         body
         {
+            padding:1rem;
             display: grid;
             grid-template-rows: 1fr 1fr;
             height:100%;
         }
 
+        h1, h2, h3, h4, h5, h6
+        {
+            color:white;
+        }
+
         .theTeams
         {
             display:flex;
-            justify-content: space-around;
+            width:100%;
+            overflow: hidden;
         }
 
         .aTeam
         {
-            display: block;
-            max-height: 100%;
-            overflow:hidden;
-            border:1px solid red;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .aTeam, .aTeam *
+        {
+            width:100%;
+
+        }
+
+        .aTurnList
+        {
+            overflow: hidden;
         }
 
         .turnButton
         {
             display:block;
+            width: 100%;
         }
         
         .calculator {
+            width:100%;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            grid-gap: .5rem;
-            margin: 0 auto;
+            grid-gap: 1rem;
             flex-basis: 75%;
         }
 
-        .theDisplay {
+        .theDisplayyyy {
             grid-column: 1 / span 3;
+            text-align: center;
         }
 
         .numButton {
@@ -68,12 +104,11 @@
         .collapsed
         {
             opacity:0;
-            width:0;
-            height:0;
             overflow: hidden;
             padding:0;
             margin:0;
             display:contents;
+            transform: scale(0);
         }
 
         .hidden
@@ -85,8 +120,9 @@
     
 
 <script>
+    
 
-function UPME_numButton()
+UPME[".numButton"] = function()
 {
     if (this.myNumber === undefined) 
     {
@@ -94,24 +130,20 @@ function UPME_numButton()
         this.innerHTML = this.myNumber;
     }
 
-    if (this.event_click)
+    if (this.event_touchstart)
     {
         let theDisplay = document.querySelector('.theDisplay');
-       // if (theDisplay.myString==="000")
-        //    theDisplay.myString="";
         
         let str = theDisplay.myString;
         if (str.length==3)
             str = str.substring(1);
-
-
         str+=""+this.myNumber;
 
         theDisplay.myString = str;
     }
 }
 
-function UPME_clearButton()
+UPME[".clearButton"] = function()
 {
     if (this.event_click)
     {        
@@ -129,7 +161,7 @@ function UPME_clearButton()
     }
 }
 
-function UPME_teamScore()
+UPME[".teamScore"] = function()
 {
     if (this.myScore===undefined)
     {
@@ -149,7 +181,7 @@ function UPME_teamScore()
         newTurnButton.classList.add('UPME');
         newTurnButton.myNumber = displayNum;
 
-        this.parentNode.appendChild(newTurnButton);
+        this.parentNode.querySelector(".aTurnList").prepend(newTurnButton);
         
         theDisplay.myString = "000";
     }
@@ -157,7 +189,7 @@ function UPME_teamScore()
     this.querySelector("h1").innerHTML = this.myScore;
 }
 
-function UPME_turnButton()
+UPME[".turnButton"] = function()
 {    
     var str = ""+this.myNumber;
     if (str.length==1)
@@ -173,14 +205,14 @@ function UPME_turnButton()
     {
         if (confirm("Remove "+this.myNumber+"?"))
         {
-            this.parentNode.querySelector('.teamScore').myScore+=this.myNumber;
+            this.parentNode.parentNode.querySelector('.teamScore').myScore+=this.myNumber;
             this.remove();
             document.querySelector(".theDisplay").myString = "000";
         }
     }
 }
 
-function UPME_theDisplay()
+UPME[".theDisplay"] = function()
 {
     if (this.myString === undefined) 
     {
@@ -190,7 +222,17 @@ function UPME_theDisplay()
     this.innerHTML = this.myString;
 }
 
-function UPME_addTeamButton()
+UPME[".theTeamsMenu"] = function()
+{
+    if (document.querySelectorAll('.turnButton:not(.prototype)').length>0)
+    {
+        this.classList.add('hidden');
+    }
+    else
+        this.classList.remove('hidden');
+}
+
+UPME[".addTeamButton"] = function()
 {
     let noTeams = document.querySelectorAll('.aTeam:not(.prototype)').length==0;
 
@@ -209,9 +251,21 @@ function UPME_addTeamButton()
     else
         this.classList.remove('collapsed');    
 
+
+        let theDisplay = document.querySelector('.theDisplay');
+
+        if (theDisplay.myString==="000")
+        {
+            this.disabled = false;
+        }
+        else
+        {
+            this.disabled = true;
+        }
+
 }
 
-function UPME_resetButton()
+UPME[".resetButton"] = function()
 {
     if (this.event_click)
     {
@@ -222,22 +276,26 @@ function UPME_resetButton()
     }
 }
 
-function UPME_removeTeamButton()
+UPME[".removeTeamButton"] = function()
 {
-    if (this.event_click)
+    if (this.event_click && !this.classList.contains('collapsed'))
     {
-        if (confirm("Remove Team?"))
-        {
-            this.parentNode.remove();
-        }
+           let teams = document.querySelectorAll('.aTeam:not(.prototype)');
+           teams[teams.length-1].remove();
     }
+    
 
-    if (document.querySelectorAll('.aTeam:not(.prototype)').length==1 || document.querySelectorAll('.turnButton:not(.prototype)').length>0)
+   if (document.querySelectorAll('.aTeam:not(.prototype)').length==1 || 
+   document.querySelectorAll('.turnButton:not(.prototype)').length>0 ||
+   document.querySelector('.theDisplay').myString!=="000")
     {
-        this.classList.add('collapsed');
+        this.disabled=true;
     }
     else
-        this.classList.remove('collapsed');
+    {
+        this.disabled=false;
+    }
+
 }
 
 </script>
@@ -245,21 +303,34 @@ function UPME_removeTeamButton()
 <body>
     
     <section class="theTeams">
-        <button class="UPME addTeamButton">Add Team</button>
+        <section class="theTeamsMenu">
+            <button class="UPME addTeamButton">
+                Add Team
+            </button>
+            <button class="UPME removeTeamButton">
+                Remove Team
+            </button>
+        </section>
+        
         <div class="aTeam prototype">
             <button class="teamScore UPME">
                 <h1>
 
                 </h1>
             </button>
-            <button class="UPME removeTeamButton">
-                Remove Team
-            </button>
+            
+            <div class="aTurnList">
+                    <button class="turnButton prototype collapsed"></button>
+            </div>
         </div>     
     </section>
+    
 
     <div class="calculator">
-        <div class="theDisplay UPME"></div>
+            
+            
+            
+            <h2 class="theDisplay UPME"></h2>
         <button class="numButton UPME" data-val="0"></button>
         <button class="numButton UPME" data-val="1"></button>
         <button class="numButton UPME" data-val="2"></button>
@@ -272,10 +343,7 @@ function UPME_removeTeamButton()
         <button class="resetButton UPME">QUIT</button>
         <button class="numButton UPME" data-val="9"></button>
         <button class="clearButton UPME">CLEAR</button>
-        <button class="turnButton prototype collapsed"></button>
     </div>
 
-    
-<script src="upme.js" defer></script>
 </body>
 </html>
