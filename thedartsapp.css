@@ -1,0 +1,276 @@
+
+@keyframes fadeIn 
+{
+    from 
+    {
+        transform:scale(0);
+        height:0;
+    }
+    to 
+    {
+        transform: scale(1);
+    }         
+}
+
+*
+{
+    animation: fadeIn .25s ease-out;
+    transition:all .25s ease-out !important;
+}
+
+:root {
+
+
+
+
+    --blue: #3d6dff;
+    --black: #000000;
+    --white: #ffffff;
+    --red: #f03f35;
+    --yellow: #ffe400;
+    --green: #51b948;
+    --orange: #f78f1e;
+    --gold: #e7b70d;
+    --grey: #f0f0f0;
+    --brown: #814b10;
+    
+    
+    --fntText: monospace;
+    --fntBody: 'Trebuchet MS', sans-serif;
+    
+    --darkGreen: #045128;
+    --darkRed: #68001d;
+    --darkBlue: #3504b0;
+    
+    --light:300;
+    --regular:500;
+}
+
+html
+{
+    height:100%;
+    font-size: calc(((1vh + 1vw)/2)*3);
+    background-color: black;
+    text-align: center;
+    touch-action: none;
+    font-family: var(--fntText);
+}
+
+button
+{
+    background-color: var(--yellow);
+    color:black;
+    border:2px solid black;
+}
+
+.numButton
+{
+    padding:0;
+}
+
+body
+{
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    height:100%;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    color:white;
+    font-family: var(--fntText);
+    margin:0;
+}
+
+.topSection
+{
+    overflow:hidden;
+    height:100%;
+}
+
+.theTeams
+{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(25%, 1fr));
+    
+    width:100%;
+    overflow: hidden;
+    align-items: flex-start;
+    height: 100%;
+}
+
+.theTeamsMenu
+{
+    display:flex;
+    width:100%;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+}
+
+.aTeam
+{
+    height: 100%;
+    flex-basis: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.teamScore
+{
+    width: 100%;
+    max-width: 50vw;
+}
+
+
+.aTurnList
+{
+    overflow: hidden;
+}
+
+.turnButton
+{
+    display:block;
+    background-color: transparent;
+}
+
+.turnButton.last
+{
+    color:var(--yellow) !important;
+    border:2px dashed var(--yellow) !important;
+}
+
+.calculator 
+{
+    width:100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+ 
+    flex-basis: 100%;
+}
+
+.theDisplay
+{
+    text-align: center;
+    font-size:2rem;
+    color:var(--yellow);
+}
+
+.prototype
+{
+    display:none;
+    opacity:0;
+}
+
+.collapsed
+{
+    transform: scale(0);
+    width:0;
+    height:0;
+    padding: 0;
+    margin:0;
+    font-size: 0;
+    position: relative;
+    left:50%;
+    top:50%;
+    content:'';
+    color:transparent !important;
+}
+
+.hidden
+{
+    display: none;
+}
+
+.touched
+{
+    background-color: white !important;
+    color:black;
+    
+    transition:none !important;
+}
+
+.destroying
+{
+   transform: scale(0);
+   opacity:0;
+}
+
+.disabled
+{
+    opacity:.5;
+}
+
+
+
+.teamScoreEnterButton
+{
+    overflow: visible;
+    margin-bottom: .5rem;
+    font-size: 1.25rem;
+}
+
+.teamScoreDisplay
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.teamScore h1
+{
+    font-size: 3.5rem;
+    overflow: visible;
+}
+
+button:disabled
+{
+    opacity:.25;
+}
+
+.addTeamButton, .removeTeamButton, .resetButton, .clearButton
+{
+    font-size: .75rem;
+    background-color:var(--black);
+}
+
+.addTeamButton
+{   
+    color: var(--green);
+    border-color:var(--green);
+    align-self:flex-end;
+}
+
+.removeTeamButton
+{   
+    color: var(--red);
+    border-color:var(--red);
+    align-self:flex-end;
+}
+
+.resetButton
+{
+    color: var(--blue);
+    border-color:var(--blue);
+    padding:0;
+}
+
+.clearButton
+{
+    color: var(--yellow);
+    border-color:var(--yellow);
+    padding:0;
+}
+
+
+.changeColor
+{
+    margin:.1rem;
+    padding:.1rem;
+    background-color: transparent;
+    color:white;
+    border:none;
+}

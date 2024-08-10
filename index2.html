@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPME.js Demo with Pico.css</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <style>
+        .dynamicBg {
+            height: 40px;
+            transition: background-color 0.3s;
+        }
+    </style>
+    <script>
+        // 1. Button Click Counter
+        function UPME_buttonClickCounter() {
+            if (this.event_click) {
+                if (typeof this.clickCount === 'undefined') {
+                    this.clickCount = 0;
+                }
+                this.clickCount += 1;
+                this.textContent = `Button clicked ${this.clickCount} times`;
+            }
+        }
+
+        // 2. Text Input Mirror
+        function UPME_textInputMirror() {
+            if (this.event_input) {
+                const value = this.value;
+                document.querySelector('.mirrorDisplay').textContent = value;
+            }
+        }
+
+        // 3. Range Slider with Dynamic Background
+        function UPME_rangeSlider() {
+            if (this.event_input) {
+                const value = this.value;
+                const dynamicBg = document.querySelector('.dynamicBg');
+                if (dynamicBg) {
+                    dynamicBg.style.backgroundColor = `rgb(${value}, ${255 - value}, ${value / 2})`;
+                }
+                document.querySelector('.sliderValueDisplay').textContent = `Slider Value: ${value}`;
+            }
+        }
+
+        // 4. Toggle Switch
+        function UPME_toggleSwitch() {
+            if (this.event_click) {
+                if (typeof this.toggleState === 'undefined') {
+                    this.toggleState = false;
+                }
+                this.toggleState = !this.toggleState;
+                this.textContent = `Toggle is ${this.toggleState ? 'On' : 'Off'}`;
+            }
+        }
+
+        // 5. Text Area Character Counter
+        function UPME_charCounter() {
+            if (this.event_input) {
+                const value = this.value;
+                document.querySelector('.charCountDisplay').textContent = `Characters: ${value.length}`;
+            }
+        }
+
+        // 6. Dropdown Selection Display
+        function UPME_dropdownSelection() {
+            if (this.event_change) {
+                const selectedValue = this.value;
+                document.querySelector('.dropdownDisplay').textContent = `Selected: ${selectedValue}`;
+            }
+        }
+
+        // 7. Double-Click Detector
+        function UPME_doubleClickDetector() {
+            if (this.event_dblclick) {
+                this.textContent = "Button double-clicked!";
+            }
+        }
+
+        // 8. Key Press Display
+        function UPME_keyPressDisplay() 
+        {
+            if (this.event_keyup) {
+                const keyPressed = this.event_keyup.key;
+                if (keyPressed) {
+                    document.querySelector('.keyDisplay').textContent = `Key Pressed: ${keyPressed}`;
+                } else {
+                    document.querySelector('.keyDisplay').textContent = `Key Pressed: None`;
+                }
+            }
+        }
+
+    </script>
+</head>
+<body class="UPME">
+    <main class="container">
+        <h1 class="title">UPME.js Demo with Pico.css</h1>
+        <p class="lead">Explore various interactive elements using UPME.js and Pico.css.</p>
+
+        <!-- 1. Button Click Counter -->
+        <article>
+            <button class="UPME buttonClickCounter">Button clicked 0 times</button>
+        </article>
+
+        <!-- 2. Text Input Mirror -->
+        <article>
+            <input type="text" class="UPME textInputMirror" placeholder="Type to mirror...">
+            <p class="mirrorDisplay">Type to mirror...</p>
+        </article>
+
+        <!-- 3. Range Slider with Dynamic Background -->
+        <article>
+            <input type="range" class="UPME rangeSlider" min="0" max="255" value="128">
+            <div class="dynamicBg"></div>
+            <p class="sliderValueDisplay">Slider Value: 128</p>
+        </article>
+
+        <!-- 4. Toggle Switch -->
+        <article>
+            <button class="UPME toggleSwitch">Toggle is Off</button>
+        </article>
+
+        <!-- 5. Text Area Character Counter -->
+        <article>
+            <textarea class="UPME charCounter" placeholder="Start typing..."></textarea>
+            <p class="charCountDisplay">Characters: 0</p>
+        </article>
+
+        <!-- 6. Dropdown Selection Display -->
+        <article>
+            <select class="UPME dropdownSelection">
+                <option value="Option 1">Option 1</option>
+                <option value="Option 2">Option 2</option>
+                <option value="Option 3">Option 3</option>
+            </select>
+            <p class="dropdownDisplay">Selected: Option 1</p>
+        </article>
+
+        <!-- 7. Double-Click Detector -->
+        <article>
+            <button class="UPME doubleClickDetector">Double-click me!</button>
+        </article>
+
+        <!-- 8. Key Press Display -->
+        <article>
+            <input type="text" class="UPME keyPressDisplay" placeholder="Press any key">
+            <p class="keyDisplay">Key Pressed: None</p>
+        </article>
+    </main>
+
+    <!-- Include the UPME.js library -->
+    <script src="upme.js"></script>
+</body>
+</html>
