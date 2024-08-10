@@ -2,9 +2,9 @@
   'use strict';
 
   // Global object to store functions keyed by selectors
-  const UPME = {};
+  const UPYOURS = {};
 
-  // Helper function to safely execute UPME functions with context set to the element
+  // Helper function to safely execute UPYOURS functions with context set to the element
   function safeExecute(func, element) {
     try {
       if (typeof func === 'function') {
@@ -76,47 +76,47 @@
     });
   }
 
-  // Set to keep track of elements with the UPME class
-  const currentUPMEElements = new Set();
+  // Set to keep track of elements with the UPYOURS class
+  const currentUPYOURSElements = new Set();
 
   // The main update function
   function update() {
     const elements = document.querySelectorAll('*');
-    const newUPMEElements = new Set();
+    const newUPYOURSElements = new Set();
 
     elements.forEach(element => {
       let hasMatchingSelector = false;
 
-      for (const selector in UPME) {
+      for (const selector in UPYOURS) {
         if (element.matches(selector)) {
           hasMatchingSelector = true;
-          safeExecute(UPME[selector], element);
+          safeExecute(UPYOURS[selector], element);
         }
       }
 
       if (hasMatchingSelector) {
-        newUPMEElements.add(element);
-        if (!currentUPMEElements.has(element)) {
+        newUPYOURSElements.add(element);
+        if (!currentUPYOURSElements.has(element)) {
           addEventListeners(element);
         }
-      } else if (currentUPMEElements.has(element)) {
+      } else if (currentUPYOURSElements.has(element)) {
         removeEventListeners(element);
       }
     });
 
-    // Update the current UPME elements set
-    currentUPMEElements.forEach(element => {
-      if (!newUPMEElements.has(element)) {
-        currentUPMEElements.delete(element);
+    // Update the current UPYOURS elements set
+    currentUPYOURSElements.forEach(element => {
+      if (!newUPYOURSElements.has(element)) {
+        currentUPYOURSElements.delete(element);
       }
     });
 
-    newUPMEElements.forEach(element => {
-      currentUPMEElements.add(element);
+    newUPYOURSElements.forEach(element => {
+      currentUPYOURSElements.add(element);
     });
 
     // Reset event properties after the update
-    currentUPMEElements.forEach(element => {
+    currentUPYOURSElements.forEach(element => {
       resetEventProperties(element);
     });
   }
@@ -159,8 +159,8 @@
     });
   }
 
-  // Expose UPME to the global scope
-  window.UPME = UPME;
+  // Expose UPYOURS to the global scope
+  window.UPYOURS = UPYOURS;
 
   // Start the library
   init();

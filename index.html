@@ -31,17 +31,17 @@
         
 
     </style>
-    <!-- Include the UPME.js library -->
-    <script src="upme.js"></script>
+    <!-- Include the UPYOURS.js library -->
+    <script src="UPYOURS.js"></script>
     <script>
-         UPME['.myCounter'] = function()
+         UPYOURS['.myCounter'] = function()
          {
             this.myCount = this.myCount || 0;
             this.myCount++;
             this.textContent = "Stop/Start: "+this.myCount;
         }
 
-        UPME['.myClicker'] = function()
+        UPYOURS['button'] = function()
         {
             if (this.event_click)
             {
@@ -49,12 +49,6 @@
             }
         }
 
-        UPME['.theDisplay'] = function()
-        {
-            let theString = "CSS CLASSES: ";
-            theString += document.querySelector('.myClicker').classList;
-            document.querySelector('.theDisplay').textContent = theString;
-        }
                     
     </script>
     </head>
@@ -70,20 +64,32 @@
             <code>
                 <pre>
 
-UPME['.myCounter'] = function()
-{
-    this.myCount = this.myCount || 0;
-    this.myCount++;
-    this.textContent = "Updates: "+this.myCount;
-}
-
-UPME['.myClicker'] = function()
-{
-    if (this.event_click)
+&lt;style&gt;
+    .myCounter
     {
-        this.classList.toggle("myCounter");
+        font-style: italic;
+        background-color:red;
     }
-}
+&lt;/style&gt;
+
+
+
+&lt;script&gt;
+    UPYOURS['.myCounter'] = function()
+    {
+        this.myCount = this.myCount || 0;
+        this.myCount++;
+        this.textContent = "Updates: "+this.myCount;
+    }
+
+    UPYOURS['button'] = function()
+    {
+        if (this.event_click)
+        {
+            this.classList.toggle("myCounter");
+        }
+    }
+&lt;/script&gt;
             </pre>
             </code>
             <sample>
@@ -115,14 +121,22 @@ UPME['.myClicker'] = function()
             </code>
             <h2>Update Function</h2>
             <p>
-                Inside an UPYOURS[] function, the <code>this</code> keyword refers to the element that the function is being run on. You can use this to access and modify the element's properties, such as <code>this.textContent</code> or <code>this.style</code>. You can also use <code>this.classList</code> to add or remove CSS classes. (These are all standard JavaScript DOM properties and methods.)
+                Inside an UPYOURS[] function, the <code>this</code> keyword refers to the element that the function is being run on. You can use this to access and modify the element's properties, such as <code>this.textContent</code> or <code>this.style</code>. You can also use <code>this.classList</code> to add or remove CSS classes. These are all standard JavaScript DOM properties, but you can also define and use custom properties on the element via <code>this</code>.
             </p>
             <code>
                 <pre>
 
-UPME['.myClass'] = function()
+//This function will run every frame on all elements with the class 'myCounter'
+UPYOURS['.myCounter'] = function()
 {
-    //Code here will run be run every frame by each element with the class 'myClass'
+    //If the element doesn't have a myCount property, set it to 0
+    this.myCount = this.myCount || 0;
+
+    //Increment the myCount property
+    this.myCount++;
+
+    //Set the text content of the element to the current value of myCount
+    this.textContent = "Updates: "+this.myCount;
 }
 </pre>
             </code>
@@ -130,9 +144,10 @@ UPME['.myClass'] = function()
             <h2>Events</h2>
             <p>
                 Any element running an UPYOURS[] function will automatically have event listeners added to it. In the frame an event is received, a custom property on the element called <code>event_{{event_name}}</code> will be set to the event object. This way, inside an UPYOURS[] function you can check if an event has occurred, and access the event object if it has.
+            </p>
                 <code>
                     <pre>
-UPME['.myClass'] = function()
+UPYOURS['.myClass'] = function()
 {
     if (this.event_keydown)
     {
@@ -141,7 +156,7 @@ UPME['.myClass'] = function()
     }
 }</pre>
                 </code>
-            </p>
+            
     </main>
 
 </body>

@@ -1,4 +1,4 @@
-UPME['html'] = function()
+UPYOURS['html'] = function()
 {
     let num = 3.5;
     let count = document.querySelectorAll('.aTeam:not(.prototype)').length;
@@ -10,7 +10,7 @@ UPME['html'] = function()
 }
 
 //Functionality for all buttons, which detects both touch and mouse events intelligently and can be checked for a 'click' with this.wasTouched
-UPME["button"] = function()
+UPYOURS["button"] = function()
 {
     this.wasTouched = false;
 
@@ -36,7 +36,7 @@ UPME["button"] = function()
 }
 
 //Wait for CSS transition to finish and then remove the element
-UPME[".destroying"] = function()
+UPYOURS[".destroying"] = function()
 {
     this.disabled=true;
 
@@ -55,7 +55,7 @@ UPME[".destroying"] = function()
     
 
 //Numpad buttons
-UPME[".numButton"] = function()
+UPYOURS[".numButton"] = function()
 {
     if (this.myNumber === undefined) 
     {
@@ -78,7 +78,7 @@ UPME[".numButton"] = function()
 }
 
 //Clear button
-UPME[".clearButton"] = function()
+UPYOURS[".clearButton"] = function()
 {
     if (this.wasTouched)
     {        
@@ -97,7 +97,7 @@ UPME[".clearButton"] = function()
 }
 
 //Team score display
-UPME[".teamScore"] = function()
+UPYOURS[".teamScore"] = function()
 {
     if (this.myScore === undefined) 
     {
@@ -108,7 +108,7 @@ UPME[".teamScore"] = function()
 }
 
 //Enter button for team score
-UPME[".teamScoreEnterButton"] = function()
+UPYOURS[".teamScoreEnterButton"] = function()
 {
     if (this.wasTouched)
     {
@@ -146,7 +146,7 @@ UPME[".teamScoreEnterButton"] = function()
 
 
 //Undo button for turn
-UPME[".turnButton"] = function()
+UPYOURS[".turnButton"] = function()
 {    
     var str = ""+this.myNumber;
     if (str.length==1)
@@ -201,7 +201,7 @@ UPME[".turnButton"] = function()
 }
 
 //Display for the numpad
-UPME[".theDisplay"] = function()
+UPYOURS[".theDisplay"] = function()
 {
     if (this.myString === undefined) 
     {
@@ -217,7 +217,7 @@ UPME[".theDisplay"] = function()
 }
 
 //Hide and show the add/remove team buttons
-UPME[".addTeamButton, .removeTeamButton"] = function()
+UPYOURS[".addTeamButton, .removeTeamButton"] = function()
 {
     if (document.querySelectorAll('.turnButton:not(.prototype)').length>0)
     {
@@ -228,7 +228,7 @@ UPME[".addTeamButton, .removeTeamButton"] = function()
 }
 
 //Add a new team
-UPME[".addTeamButton"] = function()
+UPYOURS[".addTeamButton"] = function()
 {
     let noTeams = document.querySelectorAll('.aTeam:not(.prototype)').length==0;
 
@@ -254,7 +254,7 @@ UPME[".addTeamButton"] = function()
 
 
 //Remove a team
-UPME[".removeTeamButton"] = function()
+UPYOURS[".removeTeamButton"] = function()
 {
     if (this.wasTouched && !this.classList.contains('collapsed'))
     {
@@ -278,7 +278,7 @@ UPME[".removeTeamButton"] = function()
 
 
 //Reset button
-UPME[".resetButton"] = function()
+UPYOURS[".resetButton"] = function()
 {
     if (this.wasTouched)
     {
@@ -290,7 +290,7 @@ UPME[".resetButton"] = function()
 }
 
 //Team color
-UPME[".aTeam"] = function()
+UPYOURS[".aTeam"] = function()
 {
     if (this.myColorIndex === undefined)
     {
@@ -315,7 +315,7 @@ UPME[".aTeam"] = function()
 }
 
 
-UPME[".changeColor"] = function()
+UPYOURS[".changeColor"] = function()
 {
     let theDisplay = document.querySelector('.theDisplay');
     if (theDisplay.myString==="000")
