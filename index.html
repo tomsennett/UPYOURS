@@ -25,7 +25,10 @@
             align-items: center;
             background-color: #f0f0f0;
             flex-basis: 50%;
+            display:block;
         }
+        
+        
 
     </style>
     <!-- Include the UPME.js library -->
@@ -35,7 +38,7 @@
          {
             this.myCount = this.myCount || 0;
             this.myCount++;
-            this.textContent = "Updates: "+this.myCount;
+            this.textContent = "Stop/Start: "+this.myCount;
         }
 
         UPME['.myClicker'] = function()
@@ -48,7 +51,7 @@
 
         UPME['.theDisplay'] = function()
         {
-            let theString = "CSS classes on this button: ";
+            let theString = "CSS CLASSES: ";
             theString += document.querySelector('.myClicker').classList;
             document.querySelector('.theDisplay').textContent = theString;
         }
@@ -98,20 +101,46 @@ UPME['.myClicker'] = function()
                 With UPYOURS, all you have to do is add/remove CSS classes in order to change the behavior of an element. The same way you can mix and match CSS styles, you can now do the same with JavaScript behaviors.
             </p>
             <p>
-                UPYOURS was inspired by game development engines like Unity and GameMaker, where systems are built around a global update loop. This allows for a more modular and flexible approach to web development, where you can easily add and remove behaviors from elements without having to worry about the order of execution.
+                UPYOURS was inspired by game development engines like Unity and GameMaker, where systems are built around a global update loop. This allows for a more modular and flexible approach to web development, where you can easily add and remove behaviors from elements and have them react, without having to worry about the state of the rest of the page.
             </p>
         </article>
         <article>
             <h1>Guide</h1>
             <h2>Setup</h2>
             <p>Using UPYOURS is as simple as including the UPYOURS.js file in your HTML and defining functions for CSS selectors. The UPYOURS.js file will automatically run the functions for each matching element every frame. You don't have to initialize or configure anything, and you don't need to add anything to your HTML markup.</p>
+            <code>
+            <pre>
+&lt;script src="upyours.js"&gt;&lt;/script&gt;
+            </pre>
+            </code>
             <h2>Update Function</h2>
             <p>
                 Inside an UPYOURS[] function, the <code>this</code> keyword refers to the element that the function is being run on. You can use this to access and modify the element's properties, such as <code>this.textContent</code> or <code>this.style</code>. You can also use <code>this.classList</code> to add or remove CSS classes. (These are all standard JavaScript DOM properties and methods.)
             </p>
+            <code>
+                <pre>
+
+UPME['.myClass'] = function()
+{
+    //Code here will run be run every frame by each element with the class 'myClass'
+}
+</pre>
+            </code>
+            
             <h2>Events</h2>
             <p>
-                Any element running an UPYOURS[] function will automatically have event listeners added to it. In the frame an event is received, a custom property on the element called event_{{event_name}} will be set to the event object. This way, inside an UPYOURS[] function you can check if an event has occurred, and access the event object if it has.
+                Any element running an UPYOURS[] function will automatically have event listeners added to it. In the frame an event is received, a custom property on the element called <code>event_{{event_name}}</code> will be set to the event object. This way, inside an UPYOURS[] function you can check if an event has occurred, and access the event object if it has.
+                <code>
+                    <pre>
+UPME['.myClass'] = function()
+{
+    if (this.event_keydown)
+    {
+        //Code here will run when a key is pressed and the element has focus
+        alert("The key pressed was: "+this.event_keydown.key);
+    }
+}</pre>
+                </code>
             </p>
     </main>
 
