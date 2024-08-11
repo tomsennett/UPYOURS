@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frogger-like Game</title>
+    <script src="upyours.js"></script>
     <script>
 
-        let keyEvent = null;
+        let keyHeld = {};
 
-        function UPME_theGame()
+        UPYOURS['html'] = function()
         {
-            //keyEvent = this.event_keydown;
+            if (this.event_keydown)
+                keyHeld[this.event_keydown.key] = true;
+
+            if (this.event_keyup)
+                keyHeld[this.event_keyup.key] = false;
         }
 
-        function UPME_mover()
+        UPYOURS['.mover'] = function()
         {
             this.myX = this.myX || 0;
             this.myY = this.myY || 0;
@@ -21,22 +26,23 @@
             this.style.transform = `translate(${this.myX}px, ${this.myY}px)`;
         }
         
-        function UPME_frog()
+        UPYOURS['.frog'] = function()
         {
-            let keyEvent = document.querySelector(".theGame").event_keydown;
-
-            if (keyEvent)
+            if (keyHeld['ArrowUp'])
             {
-                console.log(keyEvent);
-                if (keyEvent.key === 'ArrowUp') {
-                    this.myY -= 10;
-                } else if (keyEvent.key === 'ArrowDown') {
-                    this.myY += 10;
-                } else if (keyEvent.key === 'ArrowLeft') {
-                    this.myX -= 10;
-                } else if (keyEvent.key === 'ArrowRight') {
-                    this.myX += 10;
-                }
+                this.myY -= 10;
+            }
+            if (keyHeld['ArrowDown'])
+            {
+                this.myY += 10;
+            }
+            if (keyHeld['ArrowLeft'])
+            {
+                this.myX -= 10;
+            }
+            if (keyHeld['ArrowRight'])
+            {
+                this.myX += 10;
             }
         }
 
@@ -45,6 +51,5 @@
 <body class="UPME theGame">
     <img src="frog.jpg" class="UPME frog mover" />
     
-<script src="upme.js" defer></script>
 </body>
 </html>

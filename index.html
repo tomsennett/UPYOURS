@@ -6,7 +6,7 @@
     <title>UPYOURS</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.min.css">
     <style>
-        .myCounter
+        .activeCounter
         {
             font-style: italic;
             background-color:red;
@@ -34,7 +34,7 @@
     <!-- Include the UPYOURS.js library -->
     <script src="UPYOURS.js"></script>
     <script>
-         UPYOURS['.myCounter'] = function()
+         UPYOURS['.activeCounter'] = function()
          {
             this.myCount = this.myCount || 0;
             this.myCount++;
@@ -45,7 +45,7 @@
         {
             if (this.event_click)
             {
-                this.classList.toggle("myCounter");
+                this.classList.toggle("activeCounter");
             }
         }
 
@@ -65,7 +65,7 @@
                 <pre>
 
 &lt;style&gt;
-    .myCounter
+    .activeCounter
     {
         font-style: italic;
         background-color:red;
@@ -75,39 +75,45 @@
 
 
 &lt;script&gt;
-    UPYOURS['.myCounter'] = function()
+    UPYOURS['.activeCounter'] = function()
     {
         this.myCount = this.myCount || 0;
         this.myCount++;
-        this.textContent = "Updates: "+this.myCount;
+        this.textContent = "Stop/Start: "+this.myCount;
     }
 
     UPYOURS['button'] = function()
     {
         if (this.event_click)
         {
-            this.classList.toggle("myCounter");
+            this.classList.toggle("activeCounter");
         }
     }
 &lt;/script&gt;
             </pre>
             </code>
             <sample>
-                <button class="myClicker myCounter">
-
+                <button>  
+                    Stop/Start: 0   
                 </button>
-                <div class="theDisplay">
-                    
-                </div>
-
-            </sample>
+                <button class="activeCounter">
+                    Stop/Start: 0
+                </button>
+            
+        </sample>
         </section>
             
             <p>
-                With UPYOURS, all you have to do is add/remove CSS classes in order to change the behavior of an element. The same way you can mix and match CSS styles, you can now do the same with JavaScript behaviors.
+                With UPYOURS, all you have to do is add/remove CSS classes in order to change the behavior of an element. The same way you can mix and match CSS styles, you can do the same with JavaScript behaviors.
             </p>
             <p>
                 UPYOURS was inspired by game development engines like Unity and GameMaker, where systems are built around a global update loop. This allows for a more modular and flexible approach to web development, where you can easily add and remove behaviors from elements and have them react, without having to worry about the state of the rest of the page.
+            </p>
+            <p>
+                UPYOURS is designed to be simple and lightweight, with no dependencies and no configuration. Just include the UPYOURS.js file in your HTML, define your functions, and you're good to go. There's no special syntax or API to learn, just plain JavaScript and CSS.
+            </p>
+            <p>
+                Ideal use cases for UPYOURS include prototyping, simple games, marketing websites, and any other situation where you want to add interactivity to a web page without having to write a lot of code or set up a complex framework.
             </p>
         </article>
         <article>
@@ -116,8 +122,23 @@
             <p>Using UPYOURS is as simple as including the UPYOURS.js file in your HTML and defining functions for CSS selectors. The UPYOURS.js file will automatically run the functions for each matching element every frame. You don't have to initialize or configure anything, and you don't need to add anything to your HTML markup.</p>
             <code>
             <pre>
+
+//Load UPYOURS.js first before defining your functions
 &lt;script src="upyours.js"&gt;&lt;/script&gt;
-            </pre>
+
+UPYOURS[".someClass"] = function()
+{
+    //Code here will run every frame on all elements with the class 'someClass'
+}
+
+UPYOURS[".anotherClass"] = function()
+{
+    //Code here will run every frame on all elements with the class 'anotherClass'
+}
+
+...
+
+&lt;/script&gt;</pre>
             </code>
             <h2>Update Function</h2>
             <p>
@@ -126,8 +147,8 @@
             <code>
                 <pre>
 
-//This function will run every frame on all elements with the class 'myCounter'
-UPYOURS['.myCounter'] = function()
+//This function will run every frame on all elements with the class 'activeCounter'
+UPYOURS['.activeCounter'] = function()
 {
     //If the element doesn't have a myCount property, set it to 0
     this.myCount = this.myCount || 0;
