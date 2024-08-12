@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPYOURS Calculator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.min.css">
+    <style>
+        body {
+            background-color: #282c34;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .calculator {
+            max-width: 300px;
+            background-color: #3a3f47;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .calculator-display {
+            grid-column: span 4;
+            background-color: #1e2228;
+            color: #00ff88;
+            padding: 20px;
+            font-size: 2rem;
+            text-align: right;
+            border-radius: 5px;
+            min-height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        button {
+            font-size: 1.5rem;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4a4e58;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #5e6372;
+            transform: scale(1.05);
+        }
+        button:active {
+            background-color: #33373d;
+        }
+        button.calc-btn:focus {
+            outline: none;
+            background-color: #3b8d99;
+        }
+    </style>
+    <script src="UPYOURS.js"></script>
+    <script>
+        // Initialize display content
+        let displayContent = '';
+
+        // Function to update the calculator display
+        UPYOURS['.calculator-display'] = function() {
+            this.textContent = displayContent || '\u00A0'; // Non-breaking space
+        };
+
+        // Function to handle digit and operator buttons
+        UPYOURS['.calc-btn'] = function() {
+            if (this.event_click) {
+                const value = this.textContent;
+                if (value === 'C') {
+                    displayContent = '';
+                } else if (value === '=') {
+                    try {
+                        displayContent = eval(displayContent).toString();
+                    } catch {
+                        displayContent = 'Error';
+                    }
+                } else {
+                    displayContent += value.trim();
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+
+<main class="calculator">
+    <div class="calculator-display">\u00A0</div> <!-- Start with non-breaking space -->
+    <button class="calc-btn">7</button>
+    <button class="calc-btn">8</button>
+    <button class="calc-btn">9</button>
+    <button class="calc-btn">/</button>
+    <button class="calc-btn">4</button>
+    <button class="calc-btn">5</button>
+    <button class="calc-btn">6</button>
+    <button class="calc-btn">*</button>
+    <button class="calc-btn">1</button>
+    <button class="calc-btn">2</button>
+    <button class="calc-btn">3</button>
+    <button class="calc-btn">-</button>
+    <button class="calc-btn">0</button>
+    <button class="calc-btn">.</button>
+    <button class="calc-btn">=</button>
+    <button class="calc-btn">+</button>
+    <button class="calc-btn">C</button>
+</main>
+
+</body>
+</html>

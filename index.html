@@ -65,16 +65,17 @@
                 <pre>
 
 &lt;style&gt;
+
     .activeCounter
     {
         font-style: italic;
         background-color:red;
     }
+
 &lt;/style&gt;
 
-
-
 &lt;script&gt;
+
     UPYOURS['.activeCounter'] = function()
     {
         this.myCount = this.myCount || 0;
@@ -89,6 +90,7 @@
             this.classList.toggle("activeCounter");
         }
     }
+
 &lt;/script&gt;
             </pre>
             </code>
@@ -107,10 +109,7 @@
                 With UPYOURS, all you have to do is add/remove CSS classes in order to change the behavior of an element. The same way you can mix and match CSS styles, you can do the same with JavaScript behaviors.
             </p>
             <p>
-                UPYOURS was inspired by game development engines like Unity and GameMaker, where systems are built around a global update loop. This allows for a more modular and flexible approach to web development, where you can easily add and remove behaviors from elements and have them react, without having to worry about the state of the rest of the page.
-            </p>
-            <p>
-                UPYOURS is designed to be simple and lightweight, with no dependencies and no configuration. Just include the UPYOURS.js file in your HTML, define your functions, and you're good to go. There's no special syntax or API to learn, just plain JavaScript and CSS.
+                UPYOURS was inspired by game development engines like Unity and GameMaker, where systems are built around a global update loop. It's designed to be simple and lightweight, with no dependencies and no configuration. Just include the UPYOURS.js file in your HTML, define your functions, and you're good to go. There's no special syntax or API to learn, just plain JavaScript and CSS.
             </p>
             <p>
                 Ideal use cases for UPYOURS include prototyping, simple games, marketing websites, and any other situation where you want to add interactivity to a web page without having to write a lot of code or set up a complex framework.
@@ -125,22 +124,23 @@
 
 //Load UPYOURS.js first before defining your functions
 &lt;script src="upyours.js"&gt;&lt;/script&gt;
+&lt;script&gt;
 
-UPYOURS[".someClass"] = function()
-{
-    //Code here will run every frame on all elements with the class 'someClass'
-}
+    UPYOURS[".someClass"] = function()
+    {
+        //Code here will run every frame on all elements with the class 'someClass'
+    }
 
-UPYOURS[".anotherClass"] = function()
-{
-    //Code here will run every frame on all elements with the class 'anotherClass'
-}
+    UPYOURS[".anotherClass"] = function()
+    {
+        //Code here will run every frame on all elements with the class 'anotherClass'
+    }
 
 ...
 
 &lt;/script&gt;</pre>
             </code>
-            <h2>Update Function</h2>
+            <h2>Inside Your UPYOURS Functions</h2>
             <p>
                 Inside an UPYOURS[] function, the <code>this</code> keyword refers to the element that the function is being run on. You can use this to access and modify the element's properties, such as <code>this.textContent</code> or <code>this.style</code>. You can also use <code>this.classList</code> to add or remove CSS classes. These are all standard JavaScript DOM properties, but you can also define and use custom properties on the element via <code>this</code>.
             </p>
@@ -157,7 +157,7 @@ UPYOURS['.activeCounter'] = function()
     this.myCount++;
 
     //Set the text content of the element to the current value of myCount
-    this.textContent = "Updates: "+this.myCount;
+    this.textContent = "Stop/Start: "+this.myCount;
 }
 </pre>
             </code>
