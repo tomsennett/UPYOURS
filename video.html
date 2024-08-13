@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixabay Video Gallery</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.min.css">
+    <style>
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .video-item {
+            position: relative;
+            cursor: pointer;
+        }
+        .video-item img {
+            width: 100%;
+            border-radius: 5px;
+            transition: transform 0.3s ease;
+        }
+        .video-item img:hover {
+            transform: scale(1.05);
+        }
+        .video-player {
+            margin-top: 1rem;
+            display: none;
+            max-width: 100%;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="UPYOURS.js"></script>
+    <script>
+        const apiKey = '2377667-61579e2de9175f033a582fde6';
+        let fetchResponse = null;
+
+        // UPYOURS function to initiate the fetch request
+        UPYOURS['#searchButton'] = async function() {
+            if (this.event_click) {
+                const query = document.querySelector('#searchInput').value;
+                fetchResponse = await fetch(`https://pixabay.com/api/videos/?key=${apiKey}&q=${encodeURIComponent(query)}&per_page=9`);
+            }
+        };
+
+        // UPYOURS function to check the fetchResponse and update the UI
+        UPYOURS['main'] = async function() {
+            if (fetchResponse) {
+                const data = await fetchResponse.json();
+                const videoGrid = document.querySelector('.video-grid');
+                const videos = data.hits;
+                videoGrid.innerHTML = videos.map(video => `
+                    <div class="video-item" data-url="${video.videos.large.url}">
+                        <img src="${video.userImageURL}" alt="${video.tags}">
+                        <p>${video.tags}</p>
+                    </div>
+                `).join('');
+                fetchResponse = null;  // Reset fetchResponse after use
+            }
+        };
+
+        // UPYOURS function to handle video thumbnail clicks
+        UPYOURS['.video-item'] = function() {
+            if (this.event_click) {
+                const url = this.getAttribute('data-url');
+                const videoPlayer = document.querySelector('.video-player');
+                videoPlayer.src = url;
+                videoPlayer.style.display = 'block';
+            }
+        };
+        
+        // UPYOURS function to handle Enter key on the search input
+        UPYOURS['#searchInput'] = function() {
+            if (this.event_keydown && this.event_keydown.key === 'Enter') {
+                document.querySelector('#searchButton').click();
+            }
+        };
+    </script>
+</head>
+<body>
+
+<main class="container">
+    <h1>Pixabay Video Gallery</h1>
+    <input type="text" id="searchInput" placeholder="Search for videos...">
+    <button id="searchButton">Search</button>
+    
+    <div class="video-grid"></div>
+    <video class="video-player" controls></video>
+</main>
+
+</body>
+</html>
