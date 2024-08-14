@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSS News Aggregator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.min.css">
+    <style>
+        body {
+            background-color: #f0f0f0;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #0077cc;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        #rssFeedSelect {
+            width: calc(100% - 120px);
+            margin-right: 10px;
+            border: 2px solid #0077cc;
+            border-radius: 5px;
+            padding: 10px;
+            color: #333;
+            background-color: #fff;
+            transition: border-color 0.3s ease;
+        }
+        #rssFeedSelect:focus {
+            border-color: #005799;
+            outline: none;
+        }
+        #fetchButton {
+            padding: 10px 20px;
+            background-color: #0077cc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+        #fetchButton:hover {
+            background-color: #005799;
+        }
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 20px;
+        }
+        .news-item {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .news-item:hover {
+            transform: scale(1.02);
+        }
+        .news-item h2 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+            color: #0077cc;
+        }
+        .news-item p {
+            font-size: 1rem;
+            color: #666;
+        }
+    </style>
+    <script src="UPYOURS.js"></script>
+    <script>
+        let rssData = [];
+
+        // UPYOURS function to fetch and parse the RSS feed directly
+        UPYOURS['#fetchButton'] = async function() {
+            if (this.event_click) {
+                const feedUrl = document.querySelector('#rssFeedSelect').value;
+                try {
+                    const response = await fetch(feedUrl);
+                    if (!response.ok) throw new Error('Failed to fetch feed');
+                    const text = await response.text();
+                    const parser = new DOMParser();
+                    const xml = parser.parseFromString(text, "application/xml");
+                    const items = xml.querySelectorAll("item");
+                    rssData = Array.from(items).map(item => ({
+                        title: item.querySelector("title").textContent,
+                        contentSnippet: item.querySelector("description").textContent,
+                        link: item.querySelector("link").textContent,
+                    }));
+                } catch (error) {
+                    console.error('Error fetching the RSS feed:', error);
+                    alert('Failed to load the selected feed. Please try a different one.');
+                    rssData = [];
+                }
+            }
+        };
+
+        // UPYOURS function to update each news item with RSS data
+        UPYOURS['.news-item'] = function() {
+            const index = Array.from(this.parentNode.children).indexOf(this);
+            if (rssData[index] && !this.hasAttribute('data-loaded')) {
+                this.querySelector('h2').textContent = rssData[index].title;
+                this.querySelector('p').textContent = rssData[index].contentSnippet || 'No description available.';
+                this.querySelector('a').href = rssData[index].link;
+                this.setAttribute('data-loaded', 'true');
+            }
+        };
+
+    </script>
+</head>
+<body>
+
+<main class="container">
+    <h1>RSS News Aggregator</h1>
+    <select id="rssFeedSelect">
+        <option value="http://feeds.foxnews.com/foxnews/latest">Fox News</option>
+        <option value="https://feeds.bbci.co.uk/news/rss.xml">BBC News</option>
+        <option value="http://rss.cnn.com/rss/edition.rss">CNN</option>
+        <option value="http://feeds.reuters.com/reuters/topNews">Reuters</option>
+        <option value="https://www.theguardian.com/world/rss">The Guardian</option>
+        <option value="https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml">NY Times</option>
+        <option value="https://www.aljazeera.com/xml/rss/all.xml">Al Jazeera</option>
+        <option value="https://www.npr.org/rss/rss.php?id=1001">NPR</option>
+        <option value="https://feeds.nbcnews.com/nbcnews/public/news">NBC News</option>
+        <option value="https://abcnews.go.com/abcnews/topstories">ABC News</option>
+    </select>
+    <button id="fetchButton">Fetch News</button>
+    
+    <div class="news-grid">
+        <div class="news-item">
+            <h2></h2>
+            <p></p>
+            <a href="#" target="_blank">Read more</a>
+        </div>
+        <div class="news-item">
+            <h2></h2>
+            <p></p>
+            <a href="#" target="_blank">Read more</a>
+        </div>
+        <div class="news-item">
+            <h2></h2>
+            <p></p>
+            <a href="#" target="_blank">Read more</a>
+        </div>
+        <!-- Add more .news-item elements as needed -->
+    </div>
+</main>
+
+</body>
+</html>
