@@ -72,6 +72,11 @@
             font-size: 1rem;
             color: #666;
         }
+
+        .prototype
+        {
+            display:none;
+        }
     </style>
     <script src="UPYOURS.js"></script>
     <script>
@@ -80,36 +85,59 @@
         // UPYOURS function to fetch and parse the RSS feed directly
         UPYOURS['#fetchButton'] = async function() {
             if (this.event_click) {
+                document.querySelectorAll('.news-item').forEach(item => item.removeAttribute('data-loaded'));
                 const feedUrl = document.querySelector('#rssFeedSelect').value;
-                try {
-                    const response = await fetch(feedUrl);
-                    if (!response.ok) throw new Error('Failed to fetch feed');
-                    const text = await response.text();
-                    const parser = new DOMParser();
-                    const xml = parser.parseFromString(text, "application/xml");
-                    const items = xml.querySelectorAll("item");
-                    rssData = Array.from(items).map(item => ({
-                        title: item.querySelector("title").textContent,
-                        contentSnippet: item.querySelector("description").textContent,
-                        link: item.querySelector("link").textContent,
-                    }));
-                } catch (error) {
-                    console.error('Error fetching the RSS feed:', error);
-                    alert('Failed to load the selected feed. Please try a different one.');
-                    rssData = [];
-                }
+                const response = await fetch(feedUrl);
+                const text = await response.text();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(text, "application/xml");
+                const items = xml.querySelectorAll("item");
+                rssData = Array.from(items).map(item => ({
+                    title: item.querySelector("title").textContent,
+                    contentSnippet: item.querySelector("description").textContent,
+                    link: item.querySelector("link").textContent,
+                }));
             }
         };
 
         // UPYOURS function to update each news item with RSS data
-        UPYOURS['.news-item'] = function() {
-            const index = Array.from(this.parentNode.children).indexOf(this);
-            if (rssData[index] && !this.hasAttribute('data-loaded')) {
-                this.querySelector('h2').textContent = rssData[index].title;
-                this.querySelector('p').textContent = rssData[index].contentSnippet || 'No description available.';
-                this.querySelector('a').href = rssData[index].link;
-                this.setAttribute('data-loaded', 'true');
+        UPYOURS['.news-item'] = function() 
+        {
+            if (this.classList.contains('prototype'))
+            {
+                //Do nothing
             }
+            else
+            {
+                const index = Array.from(this.parentNode.children).indexOf(this)-1;
+
+                if (rssData[index]) 
+                {
+                    this.querySelector('h2').textContent = rssData[index].title;
+                    this.querySelector('p').textContent = rssData[index].contentSnippet || 'No description available.';
+                    this.querySelector('a').href = rssData[index].link;
+                    this.setAttribute('data-loaded', 'true');
+                }
+            }
+        };
+
+
+        UPYOURS['.news-grid'] = function() 
+        {
+            const newsItemTemplate = document.querySelector('.news-item.prototype');
+
+            let items = this.querySelectorAll('.news-item:not(.prototype)');
+
+            if (items.length > rssData.length) 
+            {
+                items[items.length - 1].remove();
+            }
+            else if (items.length < rssData.length) 
+            {
+                const newsItem = newsItemTemplate.cloneNode(true);
+                newsItem.classList.remove('prototype');
+                this.appendChild(newsItem);
+            }            
         };
 
     </script>
@@ -119,36 +147,17 @@
 <main class="container">
     <h1>RSS News Aggregator</h1>
     <select id="rssFeedSelect">
-        <option value="http://feeds.foxnews.com/foxnews/latest">Fox News</option>
-        <option value="https://feeds.bbci.co.uk/news/rss.xml">BBC News</option>
-        <option value="http://rss.cnn.com/rss/edition.rss">CNN</option>
-        <option value="http://feeds.reuters.com/reuters/topNews">Reuters</option>
-        <option value="https://www.theguardian.com/world/rss">The Guardian</option>
+        <option value="https://feeds.foxnews.com/foxnews/latest">Fox News</option>
         <option value="https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml">NY Times</option>
-        <option value="https://www.aljazeera.com/xml/rss/all.xml">Al Jazeera</option>
-        <option value="https://www.npr.org/rss/rss.php?id=1001">NPR</option>
-        <option value="https://feeds.nbcnews.com/nbcnews/public/news">NBC News</option>
-        <option value="https://abcnews.go.com/abcnews/topstories">ABC News</option>
     </select>
     <button id="fetchButton">Fetch News</button>
     
     <div class="news-grid">
-        <div class="news-item">
+        <div class="news-item prototype">
             <h2></h2>
             <p></p>
             <a href="#" target="_blank">Read more</a>
         </div>
-        <div class="news-item">
-            <h2></h2>
-            <p></p>
-            <a href="#" target="_blank">Read more</a>
-        </div>
-        <div class="news-item">
-            <h2></h2>
-            <p></p>
-            <a href="#" target="_blank">Read more</a>
-        </div>
-        <!-- Add more .news-item elements as needed -->
     </div>
 </main>
 

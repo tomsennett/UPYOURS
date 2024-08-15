@@ -5,9 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frogger-like Game</title>
     <script src="upyours.js"></script>
+    <style>
+        html, body
+        {
+            width:100%;
+            height:100%;
+            overflow: hidden;
+        }
+        .frog
+        {
+            width:10%;
+        }
+
+        .car
+        {
+            width:10%;
+        }
+    </style>
     <script>
 
         let keyHeld = {};
+
+        function getCollision(element, selector) 
+        {
+            const elements = document.querySelectorAll(selector);
+            for (let i = 0; i < elements.length; i++) {
+                const currentElement = elements[i];
+                if (element !== currentElement && isOverlap(element, currentElement)) {
+                    return currentElement;
+                }
+            }
+            return false;
+        }
+
+        function isOverlap(element1, element2) 
+        {
+            const rect1 = element1.getBoundingClientRect();
+            const rect2 = element2.getBoundingClientRect();
+            return (
+                rect1.left < rect2.right &&
+                rect1.right > rect2.left &&
+                rect1.top < rect2.bottom &&
+                rect1.bottom > rect2.top
+            );
+        }
 
         UPYOURS['html'] = function()
         {
@@ -20,36 +61,93 @@
 
         UPYOURS['.mover'] = function()
         {
+            this.mySpeedX = this.mySpeedX || 0;
+            this.mySpeedY = this.mySpeedY || 0;
             this.myX = this.myX || 0;
             this.myY = this.myY || 0;
 
-            this.style.transform = `translate(${this.myX}px, ${this.myY}px)`;
+            this.myX += this.mySpeedX;
+            this.myY += this.mySpeedY;
+
+            this.style.left = this.myX + 'px';
+            this.style.top = this.myY + 'px';
+            this.style.position = 'absolute';
         }
         
         UPYOURS['.frog'] = function()
         {
+            this.myY = this.myY || 400;
             if (keyHeld['ArrowUp'])
             {
-                this.myY -= 10;
+                this.mySpeedY = -10;
             }
-            if (keyHeld['ArrowDown'])
+            else if (keyHeld['ArrowDown'])
             {
-                this.myY += 10;
+                this.mySpeedY = 10;
             }
+            else
+            {
+                this.mySpeedY = 0;
+            }
+
             if (keyHeld['ArrowLeft'])
             {
-                this.myX -= 10;
+                this.mySpeedX = -10;
             }
-            if (keyHeld['ArrowRight'])
+            else if (keyHeld['ArrowRight'])
             {
-                this.myX += 10;
+                this.mySpeedX = 10;
+            }
+            else
+            {
+                this.mySpeedX = 0;
+            }
+        }
+
+        UPYOURS['.car'] = function()
+        {
+            this.myY = this.myY || Math.random()*300;
+            this.mySpeedX = this.mySpeedX || Math.random()*10 - Math.random()*10;
+            if (this.myX > window.innerWidth)
+            {
+                this.myX = -100;
+            }
+            if (this.myX < -100)
+            {
+                this.myX = window.innerWidth;
+            }
+            this.myX += this.mySpeedX;
+
+            let otherCar = getCollision(this, '.car');
+            if (otherCar)
+            {
+                if (this.myY<otherCar.myY)
+                {
+                    this.myY--;
+                    otherCar.myY++;
+                }
+                else
+                {
+                    this.myY++;
+                    otherCar.myY--;
+                }
+            }
+
+            if (getCollision(this, '.frog'))
+            {
+                //alert('You lose!');
+                window.location.reload();
             }
         }
 
     </script>
 </head>
 <body class="UPME theGame">
-    <img src="frog.jpg" class="UPME frog mover" />
+    <img src="car.png"  class="car mover" />
+    <img src="car.png"  class="car mover" />
+    <img src="car.png"  class="car mover" />
+    <br/><br/><br/>
     
+    <img src="frog.jpg" class="frog mover" />
 </body>
 </html>
