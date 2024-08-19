@@ -4,18 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frogger-like Game</title>
-    <script src="upyours.js"></script>
+    <script src="../upyours.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.min.css">
     <style>
-        html, body
+        html
         {
             width:100%;
             height:100%;
             overflow: hidden;
-            background-color: gray;
+            background-color: black;
+            display:flex;
+        }
+        html, body
+        {
+            margin:0;
+            padding:0;
+        }
+        main
+        {
+            height: 100%;
+            position:relative;
+            background-color:gray;
+            transform-origin: top left;
+        }
+
+        .mover
+        {
+            transform-origin: center center;
         }
         .frog
         {
-            width:5%;
+            width:7%;
         }
 
         .car
@@ -23,18 +42,30 @@
             width:10%;
         }
 
+        .fly
+        {
+            width:7%;
+        }
+
         .flip
         {
             transform: scaleX(-1);
         }
+
+
     </style>
     <script>
 
         let keyHeld = {};
         let keyPress = {};
-        let gameWidth = window.innerWidth;
-        let gameHeight = window.innerHeight;
+        let gameWidth = 1920;
+        let gameHeight = 1080;
 
+        let theScore = 0;
+        let totalSteps=0;
+        let didLose=false;
+
+        //Helper function to get the first element that overlaps with the given element
         function getCollision(element, selector) 
         {
             const elements = document.querySelectorAll(selector);
@@ -47,6 +78,7 @@
             return false;
         }
 
+        //Helper function to check if two elements overlap
         function isOverlap(element1, element2) 
         {
             const rect1 = element1.getBoundingClientRect();
@@ -59,6 +91,22 @@
             );
         }
 
+        UPYOURS["main"] = function()
+        {
+            let windowWidth = window.innerWidth;
+            let windowHeight = window.innerHeight;
+
+            this.style.width = gameWidth + 'px';
+            this.style.height = gameHeight + 'px';
+
+            let theScale = Math.min(windowWidth/gameWidth, windowHeight/gameHeight);
+            this.style.transform = 'scale('+theScale+')';
+            this.style.left = (windowWidth - gameWidth*theScale)/2 + 'px';
+            this.style.top = (windowHeight - gameHeight*theScale)/2 + 'px';
+            totalSteps++;
+        }
+
+        //Watch for key presses
         UPYOURS['html'] = function()
         {
             keyPress={};
@@ -72,6 +120,7 @@
             if (this.event_keyup)
                 keyHeld[this.event_keyup.key] = false;
         }
+
 
         UPYOURS['.mover'] = function()
         {
@@ -87,8 +136,8 @@
             this.myY += this.mySpeedY;
             
 
-            this.style.left = this.myX + 'px';
-            this.style.top = this.myY + 'px';
+            this.style.left = this.myX-this.offsetWidth/2 + 'px';
+            this.style.top = this.myY-this.offsetHeight/2 + 'px';
             this.style.position = 'absolute';
 
             
@@ -103,6 +152,12 @@
             if (this.myY>gameHeight)
                 this.myY=gameHeight;
 
+            if (this.myX < 0 || this.myX > gameWidth || this.myY < 0 || this.myY > gameHeight) {
+                this.style.opacity = 0;
+            } else {
+                this.style.opacity = 1;
+            }
+
         }
         
         UPYOURS['.frog'] = function()
@@ -110,7 +165,8 @@
             if (this.didInit === undefined)
             {
                 this.didInit = true;
-                this.myY = gameHeight - 100;
+                this.myY = 900;
+                this.myX =gameWidth/2;
             }
             this.mySize = this.offsetWidth;
 
@@ -154,15 +210,15 @@
 
         UPYOURS['.car'] = function()
         {
-            this.myY = this.myY || Math.random()*this.offsetHeight*5;
+            this.myY = this.myY || 200+ Math.random()*this.offsetHeight*5;
             this.mySpeedX = this.mySpeedX || Math.random()*this.offsetWidth*.1 - Math.random()*this.offsetWidth*.1;
-            if (this.myX > window.innerWidth)
+            if (this.myX > gameWidth)
             {
                 this.myX = -100;
             }
             if (this.myX < -100)
             {
-                this.myX = window.innerWidth;
+                this.myX = gameWidth;
             }
             this.myX += this.mySpeedX;
 
@@ -183,21 +239,67 @@
 
             if (getCollision(this, '.frog'))
             {
-                //alert('You lose!');
+                if (!didLose)
+                {
+                    alert('You lose!');
+                    didLose=true;
+                }
+                
                 window.location.reload();
             }
         }
 
+        UPYOURS[".fly"] = function()
+        {
+            if (this.didInit === undefined)
+            {
+                this.myX = Math.random()*gameWidth;
+                this.myY = 50;
+                this.didInit=true;
+            }
+            
+            if (totalSteps>30)
+            { 
+                let theFrog = document.querySelector('.frog');
+                if (isOverlap(this, theFrog))
+                {
+                    theScore++;
+                    theFrog.myY = 900;
+                    theFrog.myX = gameWidth/2;
+                    this.remove();
+                    if (theScore==3)
+                    {
+                        alert('You win!');
+                        window.location.reload();
+                    }
+                }
+            }
+        }
+
+        UPYOURS['h1'] = function()
+        {
+            this.textContent = "Score: "+theScore;
+        }
+
     </script>
 </head>
-<body class="UPME theGame">
-    <img src="car.png"  class="car mover" />
-    <img src="car.png"  class="car mover" />
-    <img src="car.png"  class="car mover" />
-    <img src="car.png"  class="car mover" />
-    <img src="car.png"  class="car mover" />
-    <br/><br/><br/>
+<body>
+    <main>
+
     
-    <img src="frog.png" class="frog mover" />
+        <img src="images/fly.svg" class="fly mover" />
+        <img src="images/fly.svg" class="fly mover" />
+        <img src="images/fly.svg" class="fly mover" />
+        <img src="images/car.png"  class="car mover" />
+        <img src="images/car.png"  class="car mover" />
+        <img src="images/car.png"  class="car mover" />
+        <img src="images/car.png"  class="car mover" />
+        <img src="images/car.png"  class="car mover" />
+        <br/><br/><br/>
+        
+        <img src="images/frog.png" class="frog mover" />
+        <h2>Use arrow keys to move</h2>
+        <h1>Score: 0</h1>
+    </main>
 </body>
 </html>
