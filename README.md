@@ -8,7 +8,7 @@ To use UPYOURS.js, include the script in your project via a CDN or locally:
 
 html
 Copy code
-<script src="[https://cdn.your-cdn-link.com/upyours.js](https://cdn.jsdelivr.net/gh/tomsennett/UPYOURS@main/upyours.js)"></script>
+<script src="https://cdn.jsdelivr.net/gh/tomsennett/UPYOURS@main/upyours.js"></script>
 No special setup is required beyond including the script.
 
 Quick Start
