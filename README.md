@@ -38,8 +38,8 @@ This will automatically apply the behavior to any element with the specified cla
 
 Here are some examples demonstrating what you can achieve with UPYOURS:
 
-- **[Calculator Example](https://tomsennett.github.io/UPYOURS/examples/calculator.html)**
-- **[News Example](https://tomsennett.github.io/UPYOURS/examples/news.html)**
+- **[Calculator Example](https://tomsennett.github.io/UPYOURS/examples/calculator.html)**: Here, the ```.display``` element has a ```myText``` property which it is responsible for rendering. Each ```button``` is responsible for appending its number/operation to the ```.display``` element's ```myText``` property, and the ```.equals``` button is reponsible for commencing the evaluation of ```myText```.
+- **[News Example](https://tomsennett.github.io/UPYOURS/examples/news.html)**: The ```input``` filter checkboxes are responsible for launching an async fetch request when clicked, storing the results in an array called ```rssData```. The ```.news-grid``` makes sure that there is a number of ```.news-item``` elements matching the number of items in rssData, whatever its current state. Each ```.news-item``` is responsible for grabbing its own data from rssData and rendering it. 
 - **[Video Example](https://tomsennett.github.io/UPYOURS/examples/video.html)**
 - **[Frogger Game Example](https://tomsennett.github.io/UPYOURS/examples/frogger.html)**
 
@@ -51,7 +51,7 @@ Here are some examples demonstrating what you can achieve with UPYOURS:
 ## About
 UPYOURS was created by me, [TomSennett](https://wherecouldtom.be). I am an award-winning indie game designer, web developer, and artist. In my independent projects and in contract work, I often need to quickly stand up a web frontend that can do very basic tasks like handle input, pass data around, and change the state of things. Full frameworks like React and Vue are overkill, and even more streamlined solutions like Alpine and Svelte often bring more complexity than needed.
 
-UPYOURS adopts a global update loop modeled after game engines like Unity and GameMaker. It leverages the built-in support and flexibility of CSS selectors so that you can declare very simply to a set of elements "this is how you behave", similar to how CSS declares "this is how you look". In this way, you can combine simple behaviors into complex systems, and ensure elements function dynamically regardless of the state of themselves or the rest of the DOM.
+UPYOURS adopts a global update loop modeled after game engines like Unity and GameMaker. It leverages the built-in support and flexibility of CSS selectors so that you can declare very simply in JS to a set of elements "this is how you behave", similar to how CSS declares "this is how you look". In this way, you can combine simple behaviors into complex systems, and ensure elements function dynamically regardless of the state of themselves or the rest of the DOM.
 
 ## License
 
