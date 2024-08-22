@@ -55,7 +55,7 @@ Here are some examples demonstrating UPYOURS in action. The source HTML of each 
 
 ## Notices
 
-- **In Development** UPYOURS is generally untested and not guaranteed to play nice with any other framework, library, or platform.
+- **In Active Development:** UPYOURS is generally untested and not guaranteed to play nice with any other framework, library, or platform.
 - **Event Handling**: Each element handles its own events frame-by-frame. While this simplifies interactivity, it may lead to performance issues on pages with many elements.
 - **Conflicts**: Be mindful of potential conflicts with other libraries or frameworks, especially those that also use `requestAnimationFrame`.
 
