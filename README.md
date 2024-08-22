@@ -1,10 +1,10 @@
 # UPYOURS
 
-**UPYOURS** (short for "Update Yourself") is a lightweight JavaScript framework that lets you define update functions for HTML elements based on CSS selectors. Simply define a function for a CSS selector, and each frame, all matching elements will run that function. With UPYOURS, all you have to do is add/remove CSS classes in order to change the behavior of an element. The same way you can mix and match CSS styles, you can do the same with JavaScript behaviors.
+**UPYOURS** (short for "Update Yourself") is a lightweight JavaScript framework that lets you define update functions for HTML elements based on CSS selectors. Simply define a function for a CSS selector, and each frame, all matching elements will run that function. The same way you can mix and match CSS styles, you can do the same with JavaScript behaviors.
 
-UPYOURS was inspired by game development engines like Unity and GameMaker, where systems are built around a global update loop. It's designed to be simple and lightweight, with no dependencies and no configuration. Just include the UPYOURS.js file in your HTML, define your functions, and you're good to go. There's no special syntax or API to learn, just plain JavaScript and CSS.
+UPYOURS was inspired by game development engines like Unity and GameMaker, where systems are built around a global update loop. It's designed to be simple and lightweight, with no dependencies and no configuration. Just include the upyours.js file in your HTML, define your functions, and you're good to go. You don't need to learn any new syntax or magic words, and you don't need to muck up your markup with extra classes or attributes.
 
-Ideal use cases for UPYOURS include prototyping, simple games, marketing websites, and any other situation where you want to add interactivity to a web page without having to write a lot of code or set up a complex framework.
+Ideal use cases for UPYOURS include prototyping, small projects, simple games, and any other situation where you want to add interactivity to a web page without having to write a lot of code or set up a complex framework.
 
 ## Key Features
 
@@ -20,7 +20,7 @@ Ideal use cases for UPYOURS include prototyping, simple games, marketing website
 To start using UPYOURS, simply include the script tag in your HTML:
 
 ```html
-<script src="path/to/upyours.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/tomsennett/UPYOURS/upyours.js"></script>
 ```
 ### Basic Setup
 
