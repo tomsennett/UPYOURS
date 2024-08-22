@@ -26,30 +26,41 @@ To start using UPYOURS, simply include the script tag in your HTML:
 Define functions within the `UPYOURS` object, keyed by CSS selectors:
 
 ```javascript
-UPYOURS[".myClass"] = function() {
-  // This code runs every frame for each element with the class 'myClass'
-  console.log("Updating", this);
-};
+ UPYOURS[".someClass"] = function()
+ {
+     //Code here will run every frame on all elements with the class 'someClass'
+ }
+
+UPYOURS[".anotherClass"] = function()
+{
+    //Code here will run every frame on all elements with the class 'anotherClass'
+}
 ```
 
-This will automatically apply the behavior to any element with the specified class.
+That's all you need to do. UPYOURS will initialize itself and run its update loop, including your defined functions for all elements matching the specified selectors.
 
-### Example Usage
+## Guide
 
-Here are some examples demonstrating what you can achieve with UPYOURS:
+Find a rundown of UPYOURS basics, including how to work with element properties and events, here:
+https://tomsennett.github.io/UPYOURS/
+
+## Examples
+
+Here are some examples demonstrating UPYOURS in action. The source HTML of each page contains all the associated JavaScript. They are styled with [Pico.css](https://picocss.com/).
 
 - **[Calculator Example](https://tomsennett.github.io/UPYOURS/examples/calculator.html)**: Here, the ```.display``` element has a ```myText``` property which it is responsible for rendering. Each ```button``` is responsible for appending its number/operation to the ```.display``` element's ```myText``` property, and the ```.equals``` button is reponsible for commencing the evaluation of ```myText```.
 - **[News Example](https://tomsennett.github.io/UPYOURS/examples/news.html)**: The ```input``` filter checkboxes are responsible for launching an async fetch request when clicked, storing the results in an array called ```rssData```. The ```.news-grid``` makes sure that there is a number of ```.news-item``` elements matching the number of items in rssData, whatever its current state. Each ```.news-item``` is responsible for grabbing its own data from rssData and rendering it. 
-- **[Video Example](https://tomsennett.github.io/UPYOURS/examples/video.html)**
-- **[Frogger Game Example](https://tomsennett.github.io/UPYOURS/examples/frogger.html)**
+- **[Video Example](https://tomsennett.github.io/UPYOURS/examples/video.html)**: Similar to the News example, but using video. Requires a [free Pixabay API key](https://pixabay.com/service/about/api/).
+- **[Frogger Game Example](https://tomsennett.github.io/UPYOURS/examples/frogger.html)**: A simple game running directly in the DOM. Game objects are represented by ```<img>``` elements and moved around the screen using absolute CSS positioning. The ```html``` element gets an UPYOURS function to track user input. Requires a keyboard.
 
-## Performance Considerations
+## Notices
 
+- **In Active Development:** UPYOURS is generally untested and not guaranteed to play nice with any other framework, library, or platform.
 - **Event Handling**: Each element handles its own events frame-by-frame. While this simplifies interactivity, it may lead to performance issues on pages with many elements.
 - **Conflicts**: Be mindful of potential conflicts with other libraries or frameworks, especially those that also use `requestAnimationFrame`.
 
 ## About
-UPYOURS was created by me, [TomSennett](https://wherecouldtom.be). I am an award-winning indie game designer, web developer, and artist. In my independent projects and in contract work, I often need to quickly stand up a web frontend that can do very basic tasks like handle input, pass data around, and change the state of things. Full frameworks like React and Vue are overkill, and even more streamlined solutions like Alpine and Svelte often bring more complexity than needed.
+UPYOURS was created by me, [Tom Sennett](https://wherecouldtom.be). I am an award-winning indie game designer, web developer, and artist. In my independent projects and in contract work, I often need to quickly stand up a web frontend that can do very basic tasks like handle input, pass data around, and change the state of things. Full frameworks like React and Vue are overkill, and even more streamlined solutions like Alpine and Svelte often bring more complexity than needed.
 
 UPYOURS adopts a global update loop modeled after game engines like Unity and GameMaker. It leverages the built-in support and flexibility of CSS selectors so that you can declare very simply in JS to a set of elements "this is how you behave", similar to how CSS declares "this is how you look". In this way, you can combine simple behaviors into complex systems, and ensure elements function dynamically regardless of the state of themselves or the rest of the DOM.
 
