@@ -10,7 +10,6 @@ Ideal use cases for UPYOURS include prototyping, small projects, simple games, a
 
 - **Global Update Loop**: Continuously runs a global update loop using `requestAnimationFrame`, allowing elements to execute their own update code based on their CSS classes.
 - **Simple Function Binding**: Attach JavaScript behaviors directly to CSS selectors, with each element running its code based on the selectors it matches.
-- **No New Syntax**: There’s no need to learn new syntaxes or paradigms. UPYOURS uses plain vanilla JavaScript, making it easy to integrate into existing projects.
 - **Event Handling**: Events are tracked and stored frame-by-frame, allowing you to check for event states like `this.event_keydown` or `this.event_mousemove` directly within your update loop.
 
 ## Getting Started
