@@ -39,12 +39,12 @@ UPYOURS[".anotherClass"] = function()
 
 That's all you need to do. UPYOURS will initialize itself and run its update loop, including your defined functions for all elements matching the specified selectors.
 
-### Guide
+## Guide
 
 Find a rundown of UPYOURS basics, including how to work with element properties and events, here:
 https://tomsennett.github.io/UPYOURS/
 
-### Example Usage
+## Examples
 
 Here are some examples demonstrating UPYOURS in action. The source HTML of each page contains all the associated JavaScript. They are styled with [Pico.css](https://picocss.com/).
 
@@ -53,8 +53,9 @@ Here are some examples demonstrating UPYOURS in action. The source HTML of each 
 - **[Video Example](https://tomsennett.github.io/UPYOURS/examples/video.html)**
 - **[Frogger Game Example](https://tomsennett.github.io/UPYOURS/examples/frogger.html)**
 
-## Performance Considerations
+## Notices
 
+- **In Development** UPYOURS is generally untested and not guaranteed to play nice with any other framework, library, or platform.
 - **Event Handling**: Each element handles its own events frame-by-frame. While this simplifies interactivity, it may lead to performance issues on pages with many elements.
 - **Conflicts**: Be mindful of potential conflicts with other libraries or frameworks, especially those that also use `requestAnimationFrame`.
 
