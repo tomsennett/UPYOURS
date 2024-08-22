@@ -48,17 +48,10 @@ Here are some examples demonstrating what you can achieve with UPYOURS:
 - **Event Handling**: Each element handles its own events frame-by-frame. While this simplifies interactivity, it may lead to performance issues on pages with many elements.
 - **Conflicts**: Be mindful of potential conflicts with other libraries or frameworks, especially those that also use `requestAnimationFrame`.
 
-## Error Handling
+## About
+UPYOURS was created by me, [TomSennett](https://wherecouldtom.be). I am an award-winning indie game designer, web developer, and artist. In my independent projects and in contract work, I often need to quickly stand up a web frontend that can do very basic tasks like handle input, pass data around, and change the state of things. Full frameworks like React and Vue are overkill, and even more streamlined solutions like Alpine and Svelte often bring more complexity than needed.
 
-UPYOURS includes basic error handling within its core functions, but it’s recommended to implement your own error management as needed.
-
-## Known Limitations
-
-- **Complex Applications**: UPYOURS is not designed for large, complex applications. It excels in smaller projects where minimal setup and easy interactivity are key.
-
-## Future Development
-
-Currently, UPYOURS does not support custom events or extensions. Debugging is straightforward, relying on console logs and your usual debugging practices.
+UPYOURS adopts a global update loop modeled after game engines like Unity and GameMaker. It leverages the built-in support and flexibility of CSS selectors so that you can declare very simply to a set of elements "this is how you behave", similar to how CSS declares "this is how you look". In this way, you can combine simple behaviors into complex systems, and ensure elements function dynamically regardless of the state of themselves or the rest of the DOM.
 
 ## License
 
