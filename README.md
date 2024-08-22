@@ -27,17 +27,17 @@ Define functions within the `UPYOURS` object, keyed by CSS selectors:
 
 ```javascript
  UPYOURS[".someClass"] = function()
-    {
-        //Code here will run every frame on all elements with the class 'someClass'
-    }
+ {
+     //Code here will run every frame on all elements with the class 'someClass'
+ }
 
-    UPYOURS[".anotherClass"] = function()
-    {
-        //Code here will run every frame on all elements with the class 'anotherClass'
-    }
+UPYOURS[".anotherClass"] = function()
+{
+    //Code here will run every frame on all elements with the class 'anotherClass'
+}
 ```
 
-This will automatically apply the behavior to any element with the specified class.
+That's all you need to do. UPYOURS will initialize itself and run its update loop, including your defined functions for all elements matching the specified selectors.
 
 ### Example Usage
 
