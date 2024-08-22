@@ -42,7 +42,7 @@
     <script>
          UPYOURS['.activeCounter'] = function()
          {
-            this.myCount = this.myCount || 0;
+            this.myCount ??= 0;
             this.myCount++;
             this.textContent = "Stop/Start: "+this.myCount;
         }
@@ -92,7 +92,7 @@
 
     UPYOURS['.activeCounter'] = function()
     {
-        this.myCount = this.myCount || 0;
+        this.myCount ??= 0;
         this.myCount++;
         this.textContent = "Stop/Start: "+this.myCount;
     }
@@ -157,7 +157,7 @@
 UPYOURS['.activeCounter'] = function()
 {
     //If the element doesn't have a myCount property, set it to 0
-    this.myCount = this.myCount || 0;
+    this.myCount ??= 0;
 
     //Increment the myCount property
     this.myCount++;
