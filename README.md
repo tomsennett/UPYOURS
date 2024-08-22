@@ -50,8 +50,8 @@ Here are some examples demonstrating UPYOURS in action. The source HTML of each 
 
 - **[Calculator Example](https://tomsennett.github.io/UPYOURS/examples/calculator.html)**: Here, the ```.display``` element has a ```myText``` property which it is responsible for rendering. Each ```button``` is responsible for appending its number/operation to the ```.display``` element's ```myText``` property, and the ```.equals``` button is reponsible for commencing the evaluation of ```myText```.
 - **[News Example](https://tomsennett.github.io/UPYOURS/examples/news.html)**: The ```input``` filter checkboxes are responsible for launching an async fetch request when clicked, storing the results in an array called ```rssData```. The ```.news-grid``` makes sure that there is a number of ```.news-item``` elements matching the number of items in rssData, whatever its current state. Each ```.news-item``` is responsible for grabbing its own data from rssData and rendering it. 
-- **[Video Example](https://tomsennett.github.io/UPYOURS/examples/video.html)**
-- **[Frogger Game Example](https://tomsennett.github.io/UPYOURS/examples/frogger.html)**
+- **[Video Example](https://tomsennett.github.io/UPYOURS/examples/video.html)**: Similar to the News example, but using video. Requires a [free Pixabay API key](https://pixabay.com/service/about/api/).
+- **[Frogger Game Example](https://tomsennett.github.io/UPYOURS/examples/frogger.html)**: A simple game running directly in the DOM. Game objects are represented by ```<img>``` elements and moved around the screen using absolute CSS positioning. The ```html``` element gets an UPYOURS function to track user input. Requires a keyboard.
 
 ## Notices
 
