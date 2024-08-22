@@ -1,6 +1,6 @@
 # UPYOURS.js
 
-**UPYOURS** (short for "Update Yourself") is a lightweight JavaScript framework designed to add dynamic interactivity to your web pages with minimal boilerplate and no custom syntax to learn. Inspired by game development principles, UPYOURS makes it easy to add and remove behaviors from elements by simply adding or removing CSS classes.
+**UPYOURS** (short for "Update Yourself") is a lightweight JavaScript framework designed to add dynamic interactivity to your web pages with minimal boilerplate and no custom syntax to learn. Inspired by game development engines, UPYOURS uses a global update loop and allows you to add/remove behaviors from elements simply by adding/removing CSS classes.
 
 ## Key Features
 
