@@ -39,6 +39,11 @@ UPYOURS[".anotherClass"] = function()
 
 That's all you need to do. UPYOURS will initialize itself and run its update loop, including your defined functions for all elements matching the specified selectors.
 
+### Guide
+
+Find a rundown of UPYOURS basics, including how to work with element properties and events, here:
+https://tomsennett.github.io/UPYOURS/
+
 ### Example Usage
 
 Here are some examples demonstrating UPYOURS in action. The source HTML of each page contains all the associated JavaScript. They are styled with [Pico.css](https://picocss.com/).
