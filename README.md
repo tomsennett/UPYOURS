@@ -26,10 +26,15 @@ To start using UPYOURS, simply include the script tag in your HTML:
 Define functions within the `UPYOURS` object, keyed by CSS selectors:
 
 ```javascript
-UPYOURS[".myClass"] = function() {
-  // This code runs every frame for each element with the class 'myClass'
-  console.log("Updating", this);
-};
+ UPYOURS[".someClass"] = function()
+    {
+        //Code here will run every frame on all elements with the class 'someClass'
+    }
+
+    UPYOURS[".anotherClass"] = function()
+    {
+        //Code here will run every frame on all elements with the class 'anotherClass'
+    }
 ```
 
 This will automatically apply the behavior to any element with the specified class.
