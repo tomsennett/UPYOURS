@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pixabay Video Gallery</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.fluid.classless.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/tomsennett/UPYOURS/upyours.js"></script>
     <style>
         body {
             background-color: #1e1e2f;
@@ -67,9 +68,8 @@
             opacity: 0.85;
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/gh/tomsennett/UPYOURS/upyours.js"></script>
     <script>
-        const apiKey = '2377667-61579e2de9175f033a582fde6';
+        let apiKey = '';
         let videosData = [];
 
         UPYOURS['#searchButton'] = async function() 
@@ -115,6 +115,11 @@
             }
         };
 
+        UPYOURS['#apiInput'] = function() 
+        {
+            apiKey = this.value;
+        };
+
         UPYOURS['#searchInput'] = async function() 
         {
             if (this.myDelay === undefined)
@@ -129,7 +134,7 @@
             else if (this.myDelay>0)
             {
                 this.myDelay--;
-                if (this.myDelay == 0 && this.value!="")
+                if (this.myDelay == 0 && this.value!="" && apiKey!="")
                 {       
                     const query = this.value;
                     const response = await fetch(`https://pixabay.com/api/videos/?key=${apiKey}&q=${encodeURIComponent(query)}&per_page=9`);
@@ -143,6 +148,7 @@
 
 <main class="container">
     <h1>Pixabay Video Gallery</h1>
+    <input type="text" id="apiInput" placeholder="Enter your Pixabay API key...">
     <input type="text" id="searchInput" placeholder="Search for videos...">
     
     <div class="video-grid">

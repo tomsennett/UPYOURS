@@ -62,7 +62,7 @@
 
     <main>
         <article>
-            <h1>UPYOURS.js</h1>
+            <h1>UPYOURS Basics</h1>
             <p>UPYOURS is a lightweight JavaScript framework for adding real-time interactivity to a web page using a global update loop. Simply define a function for a CSS selector, and each frame, all matching elements will run that function.
             </p>
             <section>
@@ -129,17 +129,17 @@
             <pre>
 
 //Load UPYOURS.js first before defining your functions
-&lt;script src="upyours.js"&gt;&lt;/script&gt;
+&lt;script src="src="https://cdn.jsdelivr.net/gh/tomsennett/UPYOURS/upyours.js"&gt;&lt;/script&gt;
 &lt;script&gt;
 
     UPYOURS[".someClass"] = function()
     {
-        //Code here will run every frame on all elements with the class 'someClass'
+        //Code here will run every frame on all elements with the CSS class 'someClass'
     }
 
     UPYOURS[".anotherClass"] = function()
     {
-        //Code here will run every frame on all elements with the class 'anotherClass'
+        //Code here will run every frame on all elements with the CSS class 'anotherClass'
     }
 
 ...
@@ -185,31 +185,10 @@ UPYOURS['.myClass'] = function()
                 </code>
             </article>
             <article>
-                <h2>Examples</h2>
-                <h3>
-                    <a href="examples/calculator.html">Calculator</a>
-                </h3>
-                <h3>
-                    <a href="examples/news.html">RSS Feed Aggregator</a>
-                </h3>
-                <h3>
-                    <a href="examples/video.html">Video Search</a>
-                </h3>
-                <h3>
-                    <a href="examples/frogger.html">Frogger-like Game</a>
-                </h3>
-            </article>
-            <article>
-                <h2>Warnings</h2>
+                <h2>GitHub and Examples</h2>
                 <p>
-                    Performance: UPYOURS.js is designed for simplicity and ease of use, not for optimization. Your page will hog resources and constantly be polling for changes. Use with caution.
-                </p>
-                <p>
-                    Platform compatibility: UPYOURS.js has not been extensively tested across hardware nor browsers.
-                </p>
-                <p>
-                    Framework+library compatibility: UPYOURS.js may not play nice with other frameworks or libraries. Use at your own risk.
-                </p>
+                    Find the code, further docs, and examples on <a href="https://github.com/tomsennett/UPYOURS">GitHub</a>
+                    
 
             </article>
     </main>
